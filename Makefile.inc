@@ -1,5 +1,5 @@
 all:
-	@make *.tex
+	@make *.pdf
 
 %.pdf: %.tex
 	TEXINPUTS="..:" pdflatex $<
