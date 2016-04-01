@@ -25,12 +25,72 @@ and $\mu \sim \distNorm(\mu_0,\sigma_0^2)$.
 \begin{enumerate}
 \item Write down the likelihood of the data
 				$p(\mathcal{X}|\mu,\sigma^2)$;
+		
+	\begin{equation}
+		p(\mathcal{X}|\mu,\sigma^2)=\prod_{i=1}^{N}p(x_i|\mu,\sigma^2)
+	\end{equation}
+
 \item Write down the posterior $p(\mu|\mathcal{X},\sigma^2,
 				\mu_0,\sigma_0^2)$;
+
+	\begin{equation}
+		\begin{split}
+		p(\mu|\mathcal{X},\sigma^2,\mu_0,\sigma_0^2)
+			&=p(\mathcal{X}|\mu,\sigma^2)p(\mu|\mu_0,\sigma_0^2) \\
+			&=\prod_{i=1}^{N}p(x_i|\mu,\sigma^2)p(\mu|\mu_0,\sigma_0^2)
+		\end{split}
+	\end{equation}
+
 \item Show that $p(\mu|\mathcal{X},\sigma^2, \mu_0,\sigma_0^2)$
 				is a Gaussian distribution
 				$\distNorm(\mu|\mu_N,\sigma_N^2)$ and find the values of
 				$\mu_N$ and $\sigma_N^2$;
+
+	\begin{equation}
+		\begin{split}
+		p(\mu|\mathcal{X},\sigma^2, \mu_0,\sigma_0^2)
+		&=\prod_{i=1}^{N}\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{ \frac{1}{2\sigma^2}(x_i-\mu)^2
+		\right\} \frac{1}{\sqrt{2\pi\sigma_0^2}}\exp\left\{
+		\frac{1}{2\sigma_0^2}(\mu-\mu_0)^2 \right\} \\
+		&=\frac{1}{2\pi\sqrt{\sigma^2\sigma_0^2}}\exp\left\{
+			\frac{1}{2\sigma^2}\sum_{i=1}^N (x_i-\mu)^2
+			+\frac{1}{2\sigma_0^2}(\mu-\mu_0)^2
+		\right\} \\
+		&=\frac{1}{2\pi\sqrt{\sigma^2\sigma_0^2}}\exp\left\{
+			\frac{1}{2\sigma^2}\left(
+			\sum_{i=1}^N x_i^2 + \sum_{i=1}^N 2x_i\mu + N\mu^2
+			\right) +
+			\frac{1}{2\sigma_0^2} (\mu^2 + \mu_0^2 + 2\mu\mu_0)
+		\right\} \\
+		&=\frac{1}{2\pi\sqrt{\sigma^2\sigma_0^2}}\exp\left\{ 
+			\frac{\mu^2}{2}\left( \frac{1}{\sigma_0^2}+\frac{N}{\sigma^2} \right) +
+			\mu\left( 
+			\frac{1}{\sigma^2}\sum_{i=1}^N x_i +
+			\frac{\mu_0}{\sigma_0^2}
+			\right) + \text{const}
+		\right\} \\
+		&=\frac{1}{2\pi\sqrt{\sigma^2\sigma_0^2}}\exp\left\{ 
+			\frac{\mu^2}{2}\underbrace{\left(
+				\frac{1}{\sigma_0^2}+\frac{N}{\sigma^2}
+			\right)}_{\frac{1}{\sigma_N^2}} +
+			\mu\underbrace{\left( 
+			\frac{N}{\sigma^2} \mu_\text{ML} +
+			\frac{\mu_0}{\sigma_0^2}
+			\right)}_{\frac{1}{\sigma_N^2}\mu_N} + \text{const}
+		\right\}
+		\end{split}
+	\end{equation}
+	where $\mu_\text{ML}=\frac{1}{N}\sum_{i=1}^N x_i$, \textit{const} are terms
+	not dependent of $\mu$ and it is a Gaussian
+	distribution with mean and variance given by
+	\begin{equation}
+		\begin{split}
+			\mu_N&=\frac{\sigma^2}{N\sigma_0^2+\sigma^2}\mu_0  +
+				\frac{N\sigma_0^2}{N\sigma_0^2+\sigma^2}\mu_\text{ML} \\
+			\frac{1}{\sigma_N^2}&=\frac{1}{\sigma_0^2}+\frac{N}{\sigma^2}
+		\end{split}
+	\end{equation}
+
 \item Derive the maximum a posterior solution for $\mu$;
 \item Derive expressions for sequential update of $\mu_N$ and
 				$\sigma_N^2$;
