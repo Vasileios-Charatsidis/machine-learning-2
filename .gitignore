@@ -1,6 +1,7 @@
 *.aux
 *.log
 *.out
+*.tex.swp
 
 *-sol.pdf
 
