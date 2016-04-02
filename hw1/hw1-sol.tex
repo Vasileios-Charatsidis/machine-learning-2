@@ -192,6 +192,20 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 \begin{enumerate}
 \item Write down the likelihood of the data
 				$p(\mathcal{X}|\vt{\mu},\vt{\Sigma})$;
+
+	\begin{equation}
+		\begin{split}
+			p(\mathcal{X}|\vt{\mu},\vt{\Sigma})&=
+			\prod_{i=1}^D p(\vt{x}_i|\vt{\mu},\vt{\Sigma}) \\
+			&=\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\Sigma|^\frac{1}{2}}\prod_{i=1}^D
+			\exp\left\{ \frac{1}{2}(\vt{x}_i-\vt{\mu})^T\Sigma^{-1}(\vt{x}_i-\vt{\mu})
+			\right\} \\
+			&=\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\Sigma|^\frac{1}{2}}\exp\left\{
+				-\sum_{i=1}^D\frac{1}{2}(\vt{x}_i-\vt{\mu})^T\Sigma^{-1}(\vt{x}_i-\vt{\mu})
+			\right\}
+		\end{split}
+	\end{equation}
+
 \item Given a prior distribution
 				$p(\vt{\mu})=\distNorm(\vt{\mu}|\vt{\mu}_0,\vt{\Sigma}_0)$,
 				find the corresponding posterior distribution
