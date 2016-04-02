@@ -142,6 +142,40 @@ and $\mu \sim \distNorm(\mu_0,\sigma_0^2)$.
 
 \item Derive expressions for sequential update of $\mu_N$ and
 				$\sigma_N^2$;
+
+	First define $\mu_N^{(N)}$ as the estimated $\mu_N$ using $N$ samples.
+	Then we can write:
+	\begin{equation}
+		\begin{split}
+			\mu_N^{(N)}&=
+			\frac{\sigma^2}{N\sigma_0^2+\sigma^2}\mu_0+
+			\frac{N\sigma_0^2}{N\sigma_0^2+\sigma^2}\mu_\text{ML} \\
+			&=\frac{\sigma^2}{N\sigma_0^2+\sigma^2}\mu_0+
+			\frac{N\sigma_0^2}{N\sigma_0^2+\sigma^2}\frac{1}{N}\sum_{i=1}^N x_i \\
+			&=\frac{\sigma^2}{N\sigma_0^2+\sigma^2}\mu_0+
+			\frac{\sigma_0^2}{N\sigma_0^2+\sigma^2}\sum_{i=1}^N x_i \\
+			&=\frac{\sigma^2}{N\sigma_0^2+\sigma^2}\mu_0+
+			\frac{\sigma_0^2}{N\sigma_0^2+\sigma^2}\left(
+				x_N + \sum_{i=1}^{N-1}x_i
+			\right) \\
+			&=\frac{\sigma^2}{N\sigma_0^2+\sigma^2}\mu_0+
+			\frac{\sigma_0^2}{N\sigma_0^2+\sigma^2}\left[
+				x_N + (N-1)\mu_\text{ML}^{(N-1)}
+			\right] \\
+			&=\frac{\sigma^2}{N\sigma_0^2+\sigma^2}\mu_0+
+			\frac{(N+1)\sigma_0^2}{N\sigma_0^2+\sigma^2}\mu_\text{ML}^{(N-1)}+
+			\frac{\sigma_0^2}{N\sigma_0^2+\sigma^2}x_N \\
+			&=\frac{1}{N\sigma_0^2+\sigma^2}(\sigma^2\mu_0+(N-1)\sigma_0^2\mu_\text{ML}^{(N-1)})
+			+\frac{\sigma_0^2}{N\sigma_0^2+\sigma^2}x_N \\
+			&=\frac{(N-1)\sigma_0^2+\sigma^2}{N\sigma_0^2+\sigma^2}\left(
+			\frac{\sigma^2}{(N-1)\sigma_0^2+\sigma^2}\mu_0+
+			\frac{(N-1)\sigma_0^2}{(N-1)\sigma_0^2+\sigma^2}\mu_\text{ML}^{(N-1)}
+			\right)+\frac{\sigma_0^2}{N\sigma_0^2+\sigma^2}x_N \\
+			&=\frac{(N-1)\sigma_0^2+\sigma^2}{N\sigma_0^2+\sigma^2}\mu_N^{(N-1)}+
+			\frac{\sigma_0^2}{N\sigma_0^2+\sigma^2}x_N
+		\end{split}
+	\end{equation}
+
 \item Derive the same results (as in 5) starting from the
 				posterior distribution $p(\mu|x_1,\dots,x_{N-1})$, and
 				multiplying by the likelihood function $p(x_N |\mu) =
