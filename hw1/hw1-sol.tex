@@ -288,6 +288,21 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 				is a Gaussian distribution with mean $\vt{\mu}_N$ and
 				covariance $\vt{\Sigma}_N$
 \item Find $\vt{\mu}_N$ and $\vt{\Sigma}_N$
+
+	\begin{equation}
+		\begin{split}
+			\vt{\Sigma}_N&=(\vt{\Sigma}_0^{-1}+D\vt{\Sigma}^{-1})^{-1} \\
+			\vt{\mu}_N&=\vt{\Sigma}_N^{-1} \left(
+				\vt{\Sigma}_0^{-1}\vt{\mu}_0+\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
+			\right) \\
+			&=\left(
+				\vt{\Sigma}_0^{-1}+D\vt{\Sigma}^{-1}
+			\right)\left(
+			\vt{\Sigma}_0^{-1}\vt{\mu}_0+\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
+			\right)
+		\end{split}
+	\end{equation}
+
 \end{enumerate}
 \end{problem}
 
