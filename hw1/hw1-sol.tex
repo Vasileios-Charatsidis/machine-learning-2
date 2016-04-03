@@ -213,38 +213,75 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 
 	\begin{equation}
 		\begin{split}
-					p(\vt{\mu}|\mathcal{X},\Sigma,\vt{\mu}_0,\Sigma_0)&=
-					p(\vt{\mu}|\vt{\mu}_0,\Sigma_0)p(\mathcal{X}|\vt{\mu},\Sigma,\vt{\mu}_0,\Sigma_0) \\
-					&=\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\Sigma_0|^{\frac{1}{2}}}\exp\left\{
-									-\frac{1}{2}(\vt{\mu}-\vt{\mu}_0)^T\Sigma_0^{-1}(\vt{\mu}-\vt{\mu}_0)
-					\right\} \\
-					&\quad\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\Sigma|^\frac{1}{2}}\exp\left\{
-						-\sum_{i=1}^D\frac{1}{2}(\vt{x}_i-\vt{\mu})^T\Sigma^{-1}(\vt{x}_i-\vt{\mu})
-					\right\} \\
-					&=(2\pi)^{-D}|\Sigma\Sigma_0|^{-1}\exp\left\{
-									-\frac{1}{2}(\vt{\mu}-\vt{\mu}_0)^T\Sigma_0^{-1}(\vt{\mu}-\vt{\mu}_0)
-									-\sum_{i=1}^D\frac{1}{2}(\vt{x}_i-\vt{\mu})\Sigma^{-1}(\vt{x}_i-\vt{\mu})
-					\right\}
+			p(\vt{\mu}|\mathcal{X},\Sigma,\vt{\mu}_0,\Sigma_0)&=
+			p(\vt{\mu}|\vt{\mu}_0,\Sigma_0)p(\mathcal{X}|\vt{\mu},\Sigma,\vt{\mu}_0,\Sigma_0) \\
+			&=\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\Sigma_0|^{\frac{1}{2}}}\exp\left\{
+				-\frac{1}{2}(\vt{\mu}-\vt{\mu}_0)^T\Sigma_0^{-1}(\vt{\mu}-\vt{\mu}_0)
+			\right\} \\
+			&\quad\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\Sigma|^\frac{1}{2}}\exp\left\{
+				-\sum_{i=1}^D\frac{1}{2}(\vt{x}_i-\vt{\mu})^T\Sigma^{-1}(\vt{x}_i-\vt{\mu})
+			\right\} \\
+			&=(2\pi)^{-D}|\Sigma\Sigma_0|^{-1}\exp\left\{
+				-\frac{1}{2}(\vt{\mu}-\vt{\mu}_0)^T\Sigma_0^{-1}(\vt{\mu}-\vt{\mu}_0)
+				-\sum_{i=1}^D\frac{1}{2}(\vt{x}_i-\vt{\mu})\Sigma^{-1}(\vt{x}_i-\vt{\mu})
+			\right\}
 		\end{split}
 	\end{equation}
 
 	We then observe that for a symmetric matrix $\vt{A}$, holds that
 	\begin{equation}
-					\vt{a}^T\vt{A}\vt{b}=\vt{b}^T\vt{A}\vt{a}
+		\vt{a}^T\vt{A}\vt{b}=\vt{b}^T\vt{A}\vt{a}
 	\end{equation}
 	and so
 	\begin{equation}
 		\begin{split}
-						(\vt{a}-\vt{b})^T\vt{A}(\vt{a}-\vt{b})&=(\vt{a}^T-\vt{b}^T)\vt{A}(\vt{a}-\vt{b}) \\
-						&=(\vt{a}^T-\vt{b}^T)(\vt{A}\vt{a}-\vt{A}\vt{b}) \\
-						&=\vt{a}^T\vt{A}\vt{a}-\vt{a}^T\vt{A}\vt{b}-\vt{b}^T\vt{A}\vt{a}+\vt{b}^T\vt{A}\vt{b} \\
-						&=\vt{a}^T\vt{A}\vt{b}+\vt{b}^T\vt{A}\vt{b}-\vt{a}^T\vt{A}\vt{b}-\vt{a}^T\vt{A}\vt{b} \\
-						&=\vt{a}^T\vt{A}\vt{b}+\vt{b}^T\vt{A}\vt{b}-2\vt{a}^T\vt{A}\vt{b}
+			(\vt{a}-\vt{b})^T\vt{A}(\vt{a}-\vt{b})&=(\vt{a}^T-\vt{b}^T)\vt{A}(\vt{a}-\vt{b}) \\
+			&=(\vt{a}^T-\vt{b}^T)(\vt{A}\vt{a}-\vt{A}\vt{b}) \\
+			&=\vt{a}^T\vt{A}\vt{a}-\vt{a}^T\vt{A}\vt{b}-\vt{b}^T\vt{A}\vt{a}+\vt{b}^T\vt{A}\vt{b} \\
+			&=\vt{a}^T\vt{A}\vt{a}+\vt{b}^T\vt{A}\vt{b}-\vt{a}^T\vt{A}\vt{b}-\vt{a}^T\vt{A}\vt{b} \\
+			&=\vt{a}^T\vt{A}\vt{a}+\vt{b}^T\vt{A}\vt{b}-2\vt{a}^T\vt{A}\vt{b}
 		\end{split}
 	\end{equation}
 
 	Because we know that both $\Sigma$ and $\Sigma_0$ are symmetric, we can write
-	the posterior as
+	the exponential term of the posterior as
+
+	\begin{multline} \label{}
+			-\frac{1}{2}(\vt{\mu}-\vt{\mu}_0)^T\vt{\Sigma}_0^{-1}(\vt{\mu}-\vt{\mu}_0)
+			-\sum_{i=1}^D\frac{1}{2}(\vt{x}_i-\vt{\mu})\vt{\Sigma}^{-1}(\vt{x}_i-\vt{\mu}) \\
+			=-\frac{1}{2}\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}
+			+\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			-\frac{1}{2}\vt{\mu}_0^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			-\frac{1}{2}\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{x}_i
+			+\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{\mu}
+			-\frac{D}{2}\vt{\mu}^T\vt{\Sigma}^{-1}\vt{\mu} \\
+			=-\frac{1}{2}\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}
+			-\frac{D}{2}\vt{\mu}^T\vt{\Sigma}^{-1}\vt{\mu}
+			+\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			+\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{\mu}
+			+\text{const} \\
+			=-\frac{1}{2}\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}
+			-\frac{D}{2}\vt{\mu}^T\vt{\Sigma}^{-1}\vt{\mu}
+			+\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			+\vt{\mu}^T\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
+			+\text{const} \\
+			=-\frac{1}{2}\vt{\mu}^T(\vt{\Sigma}_0^{-1}+D\vt{\Sigma}^{-1})\vt{\mu}
+			+\vt{\mu}^T\left(
+				\vt{\Sigma}_0^{-1}\vt{\mu}_0+\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
+			\right)
+	\end{multline}
+
+	We can finally write the posterior
+
+	\begin{multline} \label{}
+		p(\vt{\mu}|\mathcal{X},\Sigma,\vt{\mu}_0,\Sigma_0) = \\
+		(2\pi)^{-D}|\Sigma\Sigma_0|^{-1}\exp\left\{
+			-\frac{1}{2}\vt{\mu}^T(\vt{\Sigma}_0^{-1}+D\vt{\Sigma}^{-1})\vt{\mu}
+				+\vt{\mu}^T\left(
+				\vt{\Sigma}_0^{-1}\vt{\mu}_0+\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
+			\right)
+		\right\}
+	\end{multline}
 
 \item Show that the posterior
 				$p(\vt{\mu}|\mathcal{X},\vt{\Sigma},\vt{\mu}_0,\vt{\Sigma}_0)$
