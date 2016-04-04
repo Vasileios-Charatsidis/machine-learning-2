@@ -409,7 +409,6 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 		\end{split}
 	\end{equation}
 
-
 \item Using the \emph{matrix inversion lemma}, also known as the
 				the Woodbury, Sherman \& Morrison formula: 
 				\begin{equation}
@@ -422,7 +421,31 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 				(\vt{A}^{-1}+\vt{B}^{-1})^{-1}=\vt{A} -
 				\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A} = \vt{B} -
 				\vt{B}(\vt{A}+\vt{B})^{-1}\vt{B}$
-				
+
+	\begin{equation}
+		\begin{split}
+			\vt{C}&=(\vt{A}^{-1}+\vt{B}^{-1})^{-1} \\
+			&=(\vt{Z}+\vt{U}\vt{W}\vt{V}^\trans) \\
+			&=(\vt{A}^{-1}+\vt{I}\vt{B}^{-1}\vt{I})^{-1} \\
+			&=(\vt{A}^{-1})^{-1}-(\vt{A}^{-1})^{-1}[(\vt{B}^{-1})^{-1}
+			+\vt{I}(\vt{A}^{-1})^{-1}\vt{I}]^{-1}(\vt{A}^{-1})^{-1} \\
+			&=\vt{A}-\vt{A}(\vt{B}+\vt{I}\vt{A}\vt{I})^{-1}\vt{I}\vt{A} \\
+			&=\vt{A}-\vt{A}(\vt{B}+\vt{A})^{-1}\vt{A} \\
+			&=\vt{A}-\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}
+		\end{split}
+	\end{equation}
+	and by applying the same process
+	\begin{equation}
+		\begin{split}
+			\vt{C}&=(\vt{B}^{-1}+\vt{A}^{-1})^{-1} \\
+			&=(\vt{Z}+\vt{U}\vt{W}\vt{V}^\trans)^{-1} \\
+			&=(\vt{B}^{-1}+\vt{I}\vt{A}^{-1}\vt{I})^{-1} \\
+			&=\vt{B}-\vt{B}(\vt{A}+\vt{B})^{-1}\vt{B} \\
+			\vt{C}&=(\vt{A}^{-1}+\vt{B}^{-1})^{-1} \\
+			&=\vt{A}-\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}
+		\end{split}
+	\end{equation}
+
 \item Show that
 				\begin{equation}
 								K^{-1} = (2\pi)^{-D/2}|\vt{A}+\vt{B}|^{-1/2}
