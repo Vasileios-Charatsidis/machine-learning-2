@@ -462,13 +462,60 @@ Tossing a biased coin with probability that it comes up heads is $\mu$.
 \item We toss the coin 3 times and it all comes up with heads.
 				How likely is that in the next toss, the coin comes up
 				with head according to MLE?
+
+	We can model a single coin flip with a Bernoulli distribution where 1 means
+	heads and 0 means tails
+	$$X_i \sim \text{Ber}(x|\mu)\begin{cases}\mu & x=1 \\ 1-\mu & x=0\end{cases}$$
+	so that the mean according to the MLE for $\mathcal{X}=\{X_1=1,X_2=1,X_3=1\}$ is given by
+	$$\mu_\text{ML}=\frac{m}{N}=\frac{1}{N}\sum_{i=1}^N X_i=1$$
+
+	We can then use $\mu_\text{ML}$ to predict the probability that the
+	4th coin toss will be head as follows
+	$$p(X_4=1|\mu_\text{ML})=\mu_\text{ML}=1$$
+
 \item Suppose that the prior $\mu \sim \text{Beta}(\mu|a,b)$.
 				What is the probability  that the coin comes up with
 				head in the 4th toss?
+
+	First we need to compute the posterior mean
+	\begin{equation}
+		\begin{split}
+			p(\mu|\mathcal{X})&=p(\mathcal{X}|\mu)p(\mu) \\
+			&=p(X_1=1,X_2=1,X_3=1|\mu)p(\mu|a,b) \\
+			&=\prod_{i=1}^3p(X_i=1|\mu)p(\mu|a,b) \\
+			&=\mu^3\frac{\Gamma(a+b)}{\Gamma(a)+\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1} \\
+			&=\frac{\Gamma(a+b)}{\Gamma(a)+\Gamma(b)}\mu^{a+2}(1-\mu)^{b-1}
+		\end{split}
+	\end{equation}
+	concluding that it is also the probability of the 4th coin flip coming up
+	heads.
+
 \item Suppose that we observe $m$ times that the coin lands
 				heads and $l$ times that it lands tails. Show that the
 				posterior mean lies between the prior mean and
 				$\mu_{\text{MLE}}$.
+
+	We can model the entire experiment as a Binomial distribution
+	$X \sim \text{Bin}(x|m+l,\mu)$ so we have that the posterior mean is
+	\begin{equation}
+		\begin{split}
+			p(\mu|X)&=p(x|\mu)p(\mu) \\
+			&=\frac{(l+m)!}{l!m!}\mu^m(1-\mu)^l\frac{\Gamma(a+b)}{\Gamma(a)+\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1} \\
+			&=\frac{(l+m)!}{l!m!}\frac{\Gamma(a+b)}{\Gamma(a)+\Gamma(b)}\mu^{m+a-1}(1-\mu)^{l+b-1} \\
+			&\propto
+			\frac{\Gamma(a+b+m+l)}{\Gamma(a+m)+\Gamma(b+l)}\mu^{m+a-1}(1-\mu)^{l+b-1} \\
+			&=\text{Beta}(\mu|a+m,b+l)
+		\end{split}
+	\end{equation}
+
+	Because the posterior mean is a probability distribution, its value lies
+	between 0 and 1, so it's less or equal than $\mu_\text{MLE}$. We can then also
+	note that the terms with $\mu$ of the prior are proportional to $a-1$ and
+	$b-1$, while for the posterior they are $m+a-1$ and $l+b-1$, so the $\mu$
+	terms of the posterior grow faster than the prior. Moreover we know that the
+	Gamma function is monotonically increasing for $a,b>0$, so we can conclude
+	that the posterior over the mean is greater or equal to the prior.
+
 \end{enumerate}
 \end{problem}
 
