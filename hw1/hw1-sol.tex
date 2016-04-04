@@ -233,7 +233,7 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 		\vt{a}^T\vt{A}\vt{b}=\vt{b}^T\vt{A}\vt{a}
 	\end{equation}
 	and so
-	\begin{equation}
+	\begin{equation} \label{eq:completing-squares}
 		\begin{split}
 			(\vt{a}-\vt{b})^T\vt{A}(\vt{a}-\vt{b})&=(\vt{a}^T-\vt{b}^T)\vt{A}(\vt{a}-\vt{b}) \\
 			&=(\vt{a}^T-\vt{b}^T)(\vt{A}\vt{a}-\vt{A}\vt{b}) \\
@@ -312,20 +312,111 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 \begin{enumerate}
 \item Show that the product of two Gaussians gives another
 				(un-normalized) Gaussian
-				$
+				$$
 				\distNorm(\vt{x}|\vt{a},\vt{A})\distNorm(\vt{x}|\vt{b},\vt{B})
 				= K^{-1}\distNorm(\vt{x}|\vt{c},\vt{C})
-				$
+				$$
 				where $\vt{c}=\vt{C}(\vt{A}^{-1}\vt{a} +
 				\vt{B}^{-1}\vt{b})$ and
 				$\vt{C}=(\vt{A}^{-1}+\vt{B}^{-1})^{-1}$.
+
+	\begin{equation} \label{eq:gaussian-product}
+		\begin{split}
+			\distNorm(\vt{x}|\vt{a},\vt{A})\distNorm(\vt{x}|\vt{b},\vt{B})&=
+			\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\vt{A}|^{\frac{1}{2}}}\exp\left\{
+				-\frac{1}{2}(\vt{x}-\vt{a})^\trans\vt{A}^{-1}(\vt{x}-\vt{a})
+			\right\} \\
+			&\qquad\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\vt{B}|^{\frac{1}{2}}}\exp\left\{
+				-\frac{1}{2}(\vt{x}-\vt{b})^\trans\vt{B}^{-1}(\vt{x}-\vt{b})
+			\right\} \\
+			&=(2\pi)^{-D}|\vt{AB}|^{-\frac{1}{2}}\exp\underbrace{\left\{
+							-\frac{1}{2}(\vt{x}-\vt{a})^\trans\vt{A}^{-1}(\vt{x}-\vt{a})
+							-\frac{1}{2}(\vt{x}-\vt{b})^\trans\vt{B}^{-1}(\vt{x}-\vt{b})
+			\right\}}_{f(\vt{x})}
+		\end{split}
+	\end{equation}
+
+	We can then develop the exponential term using the results of
+	\eqref{eq:completing-squares}
+
+	\begin{equation}
+		\begin{split}
+			f(\vt{x})&=-\frac{1}{2}(\vt{x}-\vt{a})^\trans\vt{A}^{-1}(\vt{x}-\vt{a})
+				-\frac{1}{2}(\vt{x}-\vt{b})^\trans\vt{B}^{-1}(\vt{x}-\vt{b}) \\
+				&=-\frac{1}{2}\vt{x}^\trans\vt{A}^{-1}\vt{x}
+				+\vt{x}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{x}^\trans\vt{B}^{-1}\vt{x}
+				+\vt{x}^\trans\vt{B}^{-1}\vt{b}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b} \\
+				&=-\frac{1}{2}\vt{x}^\trans(\vt{A}^{-1}+\vt{B}^{-1})\vt{x}
+				+\vt{x}^\trans(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+				-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b} \\
+				&=-\frac{1}{2}\vt{x}^\trans\vt{C}^{-1}\vt{x}
+				+\vt{x}^\trans\vt{C}^{-1}\vt{c}
+				-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+		\end{split}
+	\end{equation}
+	where the following substitution has been adopted
+	\begin{equation}
+		\begin{split}
+						\vt{C}^{-1}&=\vt{A}^{-1}+\vt{B}^{-1} \\
+						\vt{C}&=(\vt{A}^{-1}+\vt{B}^{-1})^{-1} \\
+						& \\
+						\vt{C}^{-1}\vt{c}&=\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b} \\
+						\vt{c}&=\vt{C}(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b}) \\
+						&=(\vt{A}^{-1}+\vt{B}^{-1})^{-1}(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+		\end{split}
+	\end{equation}
+
+	Substituting back $f(\vt{x})$ into \eqref{eq:gaussian-product} we obtain
+	\begin{equation} 
+		\begin{split}
+			\distNorm(\vt{x}|\vt{a},\vt{A})\distNorm(\vt{x}|\vt{b},\vt{B})
+			&=\frac{1}{(2\pi)^D}\frac{1}{|\vt{AB}|^{\frac{1}{2}}}\exp\{f(\vt{x})\} \\
+			&=\frac{1}{(2\pi)^D}\frac{1}{|\vt{AB}|^{\frac{1}{2}}}\exp\left\{
+							f(\vt{x})-\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
+							+\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
+			\right\} \\
+			&=\frac{1}{(2\pi)^D}\frac{1}{|\vt{AB}|^{\frac{1}{2}}}\exp\left\{
+							-\frac{1}{2}\vt{x}^\trans\vt{C}^{-1}\vt{x}
+							+\vt{x}^\trans\vt{C}^{-1}\vt{c}
+							-\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c} \right.\nonumber \\
+							&\qquad \left.+\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
+							-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+							-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\} \\
+			&=\frac{1}{(2\pi)^D}\frac{1}{|\vt{AB}|^{\frac{1}{2}}}\exp\left\{
+							-\frac{1}{2}(\vt{x}-\vt{c})^\trans\vt{C}^{-1}(\vt{x}-\vt{c})
+							+\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
+							-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+							-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\} \\
+			&=\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{|\vt{C}|^{\frac{1}{2}}}{|\vt{AB}|^{\frac{1}{2}}}\exp\left\{
+							+\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
+							-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+							-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\} \\
+			&\qquad \frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\vt{C}|^{\frac{1}{2}}}\exp\left\{
+							-\frac{1}{2}(\vt{x}-\vt{c})^\trans\vt{C}^{-1}(\vt{x}-\vt{c})
+			\right\} \\
+			&=K^{-1}\frac{1}{(2\pi)^{\frac{D}{2}}}\frac{1}{|\vt{C}|^{\frac{1}{2}}}\exp\left\{
+							-\frac{1}{2}(\vt{x}-\vt{c})^\trans\vt{C}^{-1}(\vt{x}-\vt{c})
+			\right\} \\
+			&=K^{-1}\distNorm(\vt{x}|\vt{c},\vt{C})
+		\end{split}
+	\end{equation}
+
+
 \item Using the \emph{matrix inversion lemma}, also known as the
 				the Woodbury, Sherman \& Morrison formula: 
 				\begin{equation}
-								(\vt{Z}+\vt{U}\vt{W}\vt{V}^\trans)^{-1} =
-								\vt{Z}^{-1} -
-								\vt{Z}^{-1}\vt{U}(\vt{W}^{-1}+\vt{V}^\trans
-								\vt{Z}^{-1}\vt{U})^{-1}\vt{V}^\trans \vt{Z}^{-1}
+					(\vt{Z}+\vt{U}\vt{W}\vt{V}^\trans)^{-1} =
+					\vt{Z}^{-1} -
+					\vt{Z}^{-1}\vt{U}(\vt{W}^{-1}+\vt{V}^\trans
+					\vt{Z}^{-1}\vt{U})^{-1}\vt{V}^\trans \vt{Z}^{-1}
 				\end{equation}
 				Proof that $\vt{C} =
 				(\vt{A}^{-1}+\vt{B}^{-1})^{-1}=\vt{A} -
