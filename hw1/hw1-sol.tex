@@ -259,16 +259,20 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 			-\frac{D}{2}\vt{\mu}^T\vt{\Sigma}^{-1}\vt{\mu}
 			+\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
 			+\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{\mu}
-			+\text{const} \\
+			-\frac{1}{2}\vt{\mu}_0^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			-\frac{1}{2}\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{x}_i \\
 			=-\frac{1}{2}\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}
 			-\frac{D}{2}\vt{\mu}^T\vt{\Sigma}^{-1}\vt{\mu}
 			+\vt{\mu}^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
 			+\vt{\mu}^T\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
-			+\text{const} \\
+			-\frac{1}{2}\vt{\mu}_0^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			-\frac{1}{2}\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{x}_i \\
 			=-\frac{1}{2}\vt{\mu}^T(\vt{\Sigma}_0^{-1}+D\vt{\Sigma}^{-1})\vt{\mu}
 			+\vt{\mu}^T\left(
 				\vt{\Sigma}_0^{-1}\vt{\mu}_0+\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
 			\right)
+			-\frac{1}{2}\vt{\mu}_0^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			-\frac{1}{2}\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{x}_i
 	\end{multline}
 
 	We can finally write the posterior
@@ -280,6 +284,8 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 				+\vt{\mu}^T\left(
 				\vt{\Sigma}_0^{-1}\vt{\mu}_0+\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
 			\right)
+			-\frac{1}{2}\vt{\mu}_0^T\vt{\Sigma}_0^{-1}\vt{\mu}_0
+			-\frac{1}{2}\sum_{i=1}^D\vt{x}_i^T\vt{\Sigma}^{-1}\vt{x}_i
 		\right\}
 	\end{multline}
 
@@ -287,6 +293,22 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 				$p(\vt{\mu}|\mathcal{X},\vt{\Sigma},\vt{\mu}_0,\vt{\Sigma}_0)$
 				is a Gaussian distribution with mean $\vt{\mu}_N$ and
 				covariance $\vt{\Sigma}_N$
+
+	\begin{align} \label{}
+		p(\vt{\mu}|\mathcal{X},\Sigma,\vt{\mu}_0,\Sigma_0) &\propto
+		\exp\left\{
+			-\frac{1}{2}\vt{\mu}^T(\vt{\Sigma}_0^{-1}+D\vt{\Sigma}^{-1})\vt{\mu}
+			+\vt{\mu}^T\left(
+				\vt{\Sigma}_0^{-1}\vt{\mu}_0+\vt{\Sigma}^{-1}\sum_{i=1}^D\vt{x}_i
+			\right)
+		\right\} \\
+		&=\exp\left\{
+			-\frac{1}{2}\vt{\mu}^\trans\vt{\Sigma}_N^{-1}\vt{\mu}
+			+\vt{\mu}^\trans\vt{\Sigma}_N^{-1}\vt{\mu}_N
+		\right\} \\
+		& \propto \distNorm(\vt{\mu}|\vt{\mu}_N,\vt{\Sigma}_N)
+	\end{align}
+
 \item Find $\vt{\mu}_N$ and $\vt{\Sigma}_N$
 
 	\begin{equation}
