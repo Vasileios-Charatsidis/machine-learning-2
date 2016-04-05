@@ -474,6 +474,70 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 								\exp\big( -\frac{1}{2}(\vt{a}-\vt{b})^\trans
 								(\vt{A}+\vt{B})^{-1} (\vt{a}-\vt{b})\big)
 				\end{equation}
+
+	\begin{equation}
+		\begin{split}
+						K^{-1}&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+						\exp\left\{
+										\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
+										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+						\right\} \\
+						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+						\exp\left\{
+										\frac{1}{2}\left[
+														(\vt{A}^{-1}+\vt{B}^{-1})^{-1}(\vt{A}^{-1}\vt{a}-\vt{B}^{-1}\vt{b})
+										\right]^\trans(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+						\right\} \\
+						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+						\exp\left\{
+										\frac{1}{2}
+										(\vt{A}^{-1}\vt{a}-\vt{B}^{-1}\vt{b})^\trans
+										(\vt{A}^{-1}+\vt{B}^{-1})^{-1}
+										(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+						\right\} \\
+						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+						\exp\left\{
+										\frac{1}{2}
+										(\vt{a}^\trans\vt{A}^{-1}-\vt{b}^\trans\vt{B}^{-1})
+										(\vt{A}^{-1}+\vt{B}^{-1})^{-1}
+										(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+						\right\} \\
+						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+						\exp\left\{
+										\frac{1}{2}
+										(\vt{a}^\trans\vt{A}^{-1}-\vt{b}^\trans\vt{B}^{-1})
+										[\vt{A}-\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}]
+										(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+										\right.\nonumber \\
+										&\qquad\left.-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+						\right\}
+		\end{split}
+	\end{equation}
+	then developing the exponential term expanding the product
+	\begin{equation}
+		\begin{split}
+						&=\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+						+\frac{1}{2}\vt{a}^\trans\vt{B}^{-1}\vt{b}
+						-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
+						-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b}
+						+\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{a}
+						+\frac{1}{2}\vt{B}^{-1}\vt{A}\vt{B}^{-1}\vt{b} \\
+						&\qquad-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{a}
+						-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b}
+						-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+						-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b} \\
+						&=
+		\end{split}
+	\end{equation}
+
 \end{enumerate}
 \end{problem}
 
