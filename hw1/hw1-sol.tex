@@ -1,6 +1,5 @@
 %        File: hw1-sol.tex
 %     Created: gio mar 31 12:00  2016 C
-% Last Change: gio mar 31 12:00  2016 C
 %
 \documentclass{amsmlaj}
 
@@ -457,7 +456,7 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 		\end{split}
 	\end{equation}
 	and by applying the same process
-	\begin{equation}
+	\begin{equation} \label{eq:proof42}
 		\begin{split}
 			\vt{C}&=(\vt{B}^{-1}+\vt{A}^{-1})^{-1}
 			=(\vt{Z}+\vt{U}\vt{W}\vt{V}^\trans)^{-1}
@@ -469,74 +468,125 @@ $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$.
 	\end{equation}
 
 \item Show that
-				\begin{equation}
-								K^{-1} = (2\pi)^{-D/2}|\vt{A}+\vt{B}|^{-1/2}
-								\exp\big( -\frac{1}{2}(\vt{a}-\vt{b})^\trans
-								(\vt{A}+\vt{B})^{-1} (\vt{a}-\vt{b})\big)
-				\end{equation}
+	\begin{equation}
+		K^{-1} = (2\pi)^{-D/2}|\vt{A}+\vt{B}|^{-1/2}
+		\exp\big( -\frac{1}{2}(\vt{a}-\vt{b})^\trans
+			(\vt{A}+\vt{B})^{-1} (\vt{a}-\vt{b})\big)
+	\end{equation}
 
 	\begin{equation}
 		\begin{split}
-						K^{-1}&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
-						\exp\left\{
-										\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
-										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
-										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
-						\right\} \\
-						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
-						\exp\left\{
-										\frac{1}{2}\left[
-														(\vt{A}^{-1}+\vt{B}^{-1})^{-1}(\vt{A}^{-1}\vt{a}-\vt{B}^{-1}\vt{b})
-										\right]^\trans(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
-										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
-										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
-						\right\} \\
-						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
-						\exp\left\{
-										\frac{1}{2}
-										(\vt{A}^{-1}\vt{a}-\vt{B}^{-1}\vt{b})^\trans
-										(\vt{A}^{-1}+\vt{B}^{-1})^{-1}
-										(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
-										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
-										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
-						\right\} \\
-						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
-						\exp\left\{
-										\frac{1}{2}
-										(\vt{a}^\trans\vt{A}^{-1}-\vt{b}^\trans\vt{B}^{-1})
-										(\vt{A}^{-1}+\vt{B}^{-1})^{-1}
-										(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
-										-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
-										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
-						\right\} \\
-						&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
-						\exp\left\{
-										\frac{1}{2}
-										(\vt{a}^\trans\vt{A}^{-1}-\vt{b}^\trans\vt{B}^{-1})
-										[\vt{A}-\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}]
-										(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
-										\right.\nonumber \\
-										&\qquad\left.-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
-										-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
-						\right\}
+			K^{-1}&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+			\exp\left\{
+				\frac{1}{2}\vt{c}^\trans\vt{C}^{-1}\vt{c}
+				-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\} \\
+			&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+			\exp\left\{
+				\frac{1}{2}\left[
+					(\vt{A}^{-1}+\vt{B}^{-1})^{-1}(\vt{A}^{-1}\vt{a}-\vt{B}^{-1}\vt{b})
+				\right]^\trans(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+				-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\} \\
+			&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+			\exp\left\{
+				\frac{1}{2}
+				(\vt{A}^{-1}\vt{a}-\vt{B}^{-1}\vt{b})^\trans
+				(\vt{A}^{-1}+\vt{B}^{-1})^{-1}
+				(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+				-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\} \\
+			&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+			\exp\left\{
+				\frac{1}{2}
+				(\vt{a}^\trans\vt{A}^{-1}-\vt{b}^\trans\vt{B}^{-1})
+				(\vt{A}^{-1}+\vt{B}^{-1})^{-1}
+				(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+				-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\} \\
+			&=(2\pi)^{-\frac{D}{2}}\frac{|\vt{C}|^{-\frac{1}{2}}}{|\vt{AB}|^{-\frac{1}{2}}}
+			\exp\left\{
+				\frac{1}{2}
+				(\vt{a}^\trans\vt{A}^{-1}-\vt{b}^\trans\vt{B}^{-1})
+				[\vt{A}-\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}]
+				(\vt{A}^{-1}\vt{a}+\vt{B}^{-1}\vt{b})
+				\right.\nonumber \\
+				&\qquad\left.-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+				-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b}
+			\right\}
 		\end{split}
 	\end{equation}
 	then developing the exponential term expanding the product
 	\begin{equation}
 		\begin{split}
-						&=\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
-						+\frac{1}{2}\vt{a}^\trans\vt{B}^{-1}\vt{b}
-						-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
-						-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b}
-						+\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{a}
-						+\frac{1}{2}\vt{B}^{-1}\vt{A}\vt{B}^{-1}\vt{b} \\
-						&\qquad-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{a}
-						-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b}
-						-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
-						-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b} \\
-						&=
+			&=\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+			+\frac{1}{2}\vt{a}^\trans\vt{B}^{-1}\vt{b}
+			-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
+			-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b}
+			+\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{a}
+			+\frac{1}{2}\vt{B}^{-1}\vt{A}\vt{B}^{-1}\vt{b} \\
+			&\qquad-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{a}
+			-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b}
+			-\frac{1}{2}\vt{a}^\trans\vt{A}^{-1}\vt{a}
+			-\frac{1}{2}\vt{b}^\trans\vt{B}^{-1}\vt{b} \\
+			&=-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
+			+\frac{1}{2}\vt{b}^\trans(
+			\vt{B}^{-1}\vt{A}\vt{B}^{-1}-\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}
+			-\vt{B}^{-1}
+			)\vt{b} \\
+			&\qquad+\vt{a}^\trans\vt{B}^{-1}\vt{b}
+			-\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b}
 		\end{split}
 	\end{equation}
+	applying the results from \eqref{eq:proof42}
+	\begin{multline} \label{}
+		\vt{B}^{-1}\vt{A}\vt{B}^{-1}-\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}
+			-\vt{B}^{-1} \\
+			=\vt{B}^{-1}\vt{A}\vt{B}^{-1}-\vt{B}^{-1}\vt{A}(
+			\vt{A}^{-1}-\vt{A}^{-1}(\vt{A}^{-1}+\vt{B}^{-1})^{-1}\vt{A}^{-1}
+			)\vt{A}\vt{B}^{-1}-\vt{B}^{-1} \\
+			=\vt{B}^{-1}\vt{A}\vt{B}^{-1}-\vt{B}^{-1}\vt{A}\vt{B}^{-1}
+			+\vt{B}^{-1}(\vt{A}^{-1}+\vt{B}^{-1})^{-1}\vt{B}^{-1}-\vt{B}^{-1} \\
+			=\vt{B}^{-1}(\vt{A}^{-1}+\vt{B}^{-1})^{-1}\vt{B}^{-1}-\vt{B}^{-1}
+	\end{multline}
+	and a second application gives
+	\begin{multline}
+		\vt{B}^{-1}(\vt{A}^{-1}+\vt{B}^{-1})^{-1}\vt{B}^{-1}-\vt{B}^{-1} \\
+		=(\vt{A}+\vt{B})^{-1}
+		\label{}
+	\end{multline}
+	and substituting back
+	\begin{multline}
+		-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
+		+\frac{1}{2}\vt{b}^\trans(
+		\vt{B}^{-1}\vt{A}\vt{B}^{-1}-\vt{B}^{-1}\vt{A}(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}
+		-\vt{B}^{-1}
+		)\vt{b} \\
+		\qquad+\vt{a}^\trans\vt{B}^{-1}\vt{b}
+		-\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{A}\vt{B}^{-1}\vt{b} \\
+		=-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
+		+\frac{1}{2}\vt{b}^\trans(\vt{A}+\vt{B})^{-1}\vt{b}
+		-\vt{a}^\trans[
+			(\vt{A}+\vt{B})^{-1}-\vt{B}^{-1}
+		]\vt{b} \\
+		=-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
+		+\frac{1}{2}\vt{b}^\trans(\vt{A}+\vt{B})^{-1}\vt{b}
+		-\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{b}
+		+\vt{a}^\trans\vt{B}^{-1}\vt{b} \\
+		=-\frac{1}{2}\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{a}
+		-\frac{1}{2}\vt{b}^\trans(\vt{A}+\vt{B})^{-1}\vt{b}
+		+\vt{b}^\trans(\vt{A}+\vt{B})^{-1}\vt{b}
+		-\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{b}
+		+\vt{a}^\trans\vt{B}^{-1}\vt{b} \\
+		=(\vt{a}-\vt{b})^\trans(\vt{A}+\vt{B})^{-1}(\vt{a}-\vt{b})
+		-\vt{a}^\trans(\vt{A}+\vt{B})^{-1}\vt{b}
+		+\vt{a}^\trans\vt{B}^{-1}\vt{b}
+		\label{}
+	\end{multline}
 
 \end{enumerate}
 \end{problem}
