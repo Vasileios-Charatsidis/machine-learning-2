@@ -220,4 +220,36 @@ An edge $X \rightarrow Y$ in a graph $\mathcal{G}$ is said to be covered if $pa_
 %\moditem{$\star$} Now, prove that for every pair of I-equivalent networks $\mathcal{G}$ and $\mathcal{G}'$, there exists a sequence of covered edge reversal operations that converts $\mathcal{G}$ and $\mathcal{G}'$. Your proof should show how to construct this sequence.
 \end{modenumerate}
 \end{problem}
+\begin{sol}
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\node[nObs,] (w1) at (0,0) {$W_1$};
+			\node[nObs,] (zi) at (1.5,0) {$Z_i$};
+			\draw[->] (w1) -- (zi);
+			\node[nObs,] (x) at (1.5,-1.5) {$X$};
+			\draw[->] (zi) -- (x);
+			\node[nObs,] (y) at (3,-1.5) {$Y$};
+			\draw[->] (zi) -- (y);
+			\draw[->] (x) -- (y);
+			\node[nObs,] (w2) at (4.5,-1.5) {$W_2$};
+			\draw[->] (y) -- (w2);
+			\node[rectangle, inner sep=-0.5mm, fit=(zi), label=above right:N]{};
+			\node[rectangle, inner sep=4.4mm, fit=(zi), draw=black!100]{};
+		\end{tikzpicture}
+		\caption{DAG with a cover edge $X \rightarrow Y$}
+		\label{fig:cover}
+	\end{figure}
+	\begin{enumerate}
+					\item In Figure \ref{fig:cover} is shown a generic DAG
+									$\mathcal{G}$ with a cover edge $X \rightarrow Y$. It is easy
+									to see that it is the maximal generalization for which we can
+									have a cover edge in $X \rightarrow Y$ because adding nodes
+									and connections to $X$ and not to $Y$ (directed towards) would
+									result in losing the cover edge property. Also adding nodes
+									similar to $W_1$ or $W_2$, or changing the direction of their
+									edges would not result in a different set of independent
+									relations.
+	\end{enumerate}
+\end{sol}
 \end{document}
