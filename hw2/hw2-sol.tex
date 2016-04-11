@@ -1,0 +1,112 @@
+\documentclass{amsmlaj}
+
+
+
+\begin{document}
+\lecturesol{Homework 2}{Ke Tran}{m.k.tran@uva.nl}{April 12, 2016}
+{Andrea Jemmett}{11162929}{andreajemmett@gmail.com}{N/A}
+\noindent {\footnotesize You are allowed to  discuss with your colleagues but you should write the answers in \emph{your own words}. If you discuss with others, write down the name of your collaborators on top of the first page. No points will be deducted for collaborations. If we find similarities in solutions beyond the listed collaborations we will consider it as cheating.}
+
+\noindent {\footnotesize We will not accept any late submissions under any circumstances. The solutions to the previous homework will be handed out in the class at the beginning of the next homework session. After this point, late submissions will be automatically graded zero.}
+
+\noindent {\footnotesize $\star$ denotes bonus exercise. You earn 1 point for solving each bonus exercise. All bonus points earned will be added to your total homework points.}
+
+\begin{problem}
+Consider three variables $a$, $b$, $c \in \{0,1\}$ having the joint distribution $p(a,b,c)$ given in Table \ref{tb:joint}. By direct evaluation, show that
+\begin{enumerate}
+\item $p(a,b) \ne p(a)p(b)$;
+\item $p(a,b|c) = p(a|c)p(b|c)$;
+\item $p(a,b,c) = p(a)p(c|a)p(b|c)$, and draw the corresponding directed graph.
+\end{enumerate}
+
+
+\begin{table}[htp]
+\caption{The joint distribution over three binary variables.}
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$a$ & $b$ & $c$ & $p(a,b,c)$\\
+\hline
+0 & 0 & 0 & 0.192\\
+0 & 0 & 1 & 0.144\\
+0 & 1 & 0 & 0.048\\
+0 & 1 & 1 & 0.216\\
+1 & 0 & 0 & 0.192\\
+1 & 0 & 1 & 0.064\\
+1 & 1 & 0 & 0.048\\
+1 & 1 & 1 & 0.096
+\end{tabular}
+\end{center}
+\label{tb:joint}
+\end{table}%
+
+\end{problem}
+
+
+%\begin{problem}
+%Prove that the joint probability in a BN is correctly normalized, that is:
+%$$
+%\sum\limits_{\vt{x}}\prod\limits_{k=1}^k{p(x_k|pa_k)}=1
+%$$
+%\end{problem}
+
+\begin{problem}
+Consider all the Bayesian networks consisting of three vertices $X$, $Y$ and $Z$. Group them into clusters such that all the graphs in each cluster encode the same set of independence relations. Draw those clusters and write down the set of independence relations for each cluster.
+\end{problem}
+
+\begin{problem}
+\begin{enumerate}
+ \item Given distributions $p$ and $q$ of a continuous random variable, Kullback-Leibler divergence of $q$ from $p$ is defined as
+    \begin{equation}
+    \mathcal{KL}(p||q)= - \int {p(x)\ln \left\{ {\frac{{q(x)}}{{p(x)}}} \right\}} dx \nonumber
+    \end{equation}
+    Evaluate the Kullback-Leibler divergence when $p(\vt{x})=\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma})$ and $q(\vt{x})=\distNorm(\vt{x}|\vt{m},\vt{L})$
+\item Entropy of a distribution $p$ is given by
+    \begin{equation}
+    \mathcal{H}(x) = - \int {p(x)\ln p(x)} dx\nonumber
+    \end{equation}
+    Derive the entropy of the multivariate Gaussian $\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma})$
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\node[nObs,] (z1) at (0,0) {$\vt{z}_1$};
+\node[obs] (x1) at (0,-1.5) {$\vt{x}_1$};
+\draw[->] (z1) -- (x1);
+\node[nObs,] (z2) at (1.5,0) {$\vt{z}_2$};
+\node[obs] (x2) at (1.5,-1.5) {$\vt{x}_2$};
+\draw[->] (z2) -- (x2);
+\draw[->] (z1) -- (z2);
+\node[nObs,] (zi) at (4.5,0) {$\vt{z}_n$};
+\node[obs] (xi) at (4.5,-1.5) {$\vt{x}_n$};
+\draw[->] (zi) -- (xi);
+\draw[->, dashed] (z2) -- (zi);
+\node[nObs,] (zN) at (7.5,0) {$\vt{z}_N$};
+\node[obs] (xN) at (7.5,-1.5) {$\vt{x}_N$};
+\draw[->] (zN) -- (xN);
+\draw[->, dashed] (zi) -- (zN);
+\end{tikzpicture}
+\caption{Markov chain of latent variables.}
+\label{fig:hmm}
+\end{figure}
+Given a graphical model in Figure \ref{fig:hmm}. Show that:
+\begin{enumerate}
+\item $p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{x}_n, \vt{z}_n) = p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_n)$
+\item $p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1}, \vt{z}_n) = p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1})$
+\item $p(\vt{x}_{n+1}, \dots, \vt{x}_N | \vt{z}_n,\vt{z}_{n+1}) = p(\vt{x}_{n+1}, \dots, \vt{x}_N | \vt{z}_{n+1})$
+\item $p(\vt{z}_{N+1}|\vt{z}_N,\vt{X}) = p(\vt{z}_{N+1}|\vt{z}_N)$, where $\vt{X} = \{\vt{x}_1, \dots,\vt{x}_N\}$
+\end{enumerate}
+
+\end{problem}
+
+\begin{problem}
+An edge $X \rightarrow Y$ in a graph $\mathcal{G}$ is said to be covered if $pa_Y = pa_X \cup \{X\}$.
+\begin{modenumerate}
+\item Let $\mathcal{G}$ be a directed graph with a cover edge $X \rightarrow Y$, and $\mathcal{G}'$ be the graph resulted by reversing the edge $X\rightarrow Y$ to $Y\rightarrow X$, but leaving everything else unchanged. Prove that $\mathcal{G}$ and $\mathcal{G}'$ encode the same set of independent relations.
+\item Provide a counterexample to this result in the case where $X \rightarrow Y$ is not a covered edge.
+%\moditem{$\star$} Now, prove that for every pair of I-equivalent networks $\mathcal{G}$ and $\mathcal{G}'$, there exists a sequence of covered edge reversal operations that converts $\mathcal{G}$ and $\mathcal{G}'$. Your proof should show how to construct this sequence.
+\end{modenumerate}
+\end{problem}
+\end{document}
