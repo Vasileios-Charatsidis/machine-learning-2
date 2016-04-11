@@ -173,11 +173,15 @@ Given a graphical model in Figure \ref{fig:hmm}. Show that:
 			\begin{equation}
 				\vt{x}_1,\dots,\vt{x}_{n-1} \ci \vt{x}_n \mid \vt{z}_n
 			\end{equation}
+			because every path connecting $\vt{x}_1,\dots,\vt{x}_{n-1}$ with
+			$\vt{x}_n$ is blocked by $\vt{z}_n$ (they are all head-to-tail edges)
 			and therefore we can write
 			\begin{equation}
 				p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{x}_n,\vt{z}_n)=p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_n)
 			\end{equation}
-		\item If we condition on $\vt{z}_{n-1}$, for the d-separation principle we have that
+		\item If we condition on $\vt{z}_{n-1}$, we have that
+			all paths connecting a node in $\vt{x}_1,\dots,\vt{x}_{n-1}$ with $\vt{z}_n$
+			are blocked by $\vt{z}_{n-1}$ and for the d-separation principle we have
 			\begin{equation}
 				\vt{x}_1,\dots,\vt{x}_{n-1} \ci \vt{z}_n \mid \vt{z}_{n-1}
 			\end{equation}
@@ -185,7 +189,9 @@ Given a graphical model in Figure \ref{fig:hmm}. Show that:
 			\begin{equation}
 				p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1},\vt{z}_n)=p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1})
 			\end{equation}
-		\item If we now condition on $\vt{z}_{n+1}$, for the d-separation principle we have that
+		\item If we now condition on $\vt{z}_{n+1}$, all paths connecting a node in
+			$\vt{x}_{n+1},\dots,\vt{x}_N$ with $\vt{z}_n$ are blocked by
+			$\vt{z}_{n+1}$. For the d-separation principle we have that
 			\begin{equation}
 				\vt{x}_{n+1},\dots,\vt{x}_N \ci \vt{z}_n \mid \vt{z}_{n+1}
 			\end{equation}
@@ -193,7 +199,9 @@ Given a graphical model in Figure \ref{fig:hmm}. Show that:
 			\begin{equation}
 				p(\vt{x}_{n+1},\dots,\vt{x}_N|\vt{z}_n,\vt{z}_{n+1})=p(\vt{x}_{n+1},\dots,\vt{x}_N|\vt{z}_{n+1})
 			\end{equation}
-		\item If we condition on $\vt{z}_N$ then for the d-separation we can write
+		\item If we condition on $\vt{z}_N$ then we have that
+			all paths connecting $\vt{z}_{N+1}$ with a node in $\vt{X}$
+			are blocked by $\vt{z}_N$. For the d-separation we can then write
 			\begin{equation}
 				\vt{z}_{N+1} \ci \vt{X} \mid \vt{z}_N
 			\end{equation}
