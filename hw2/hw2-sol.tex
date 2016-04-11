@@ -60,80 +60,80 @@ Consider all the Bayesian networks consisting of three vertices $X$, $Y$ and $Z$
     \mathcal{KL}(p||q)= - \int {p(x)\ln \left\{ {\frac{{q(x)}}{{p(x)}}} \right\}} dx \nonumber
     \end{equation}
     Evaluate the Kullback-Leibler divergence when $p(\vt{x})=\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma})$ and $q(\vt{x})=\distNorm(\vt{x}|\vt{m},\vt{L})$
-
-	\begin{align}
-		\mathcal{KL}(p||q)
-		&= - \int {p(\vt{x})\ln \left\{{\frac{{q(\vt{x})}}{{p(\vt{x})}}}\right\}} d\vt{x} \nonumber \\
-		&= \int \left[ \ln p(\vt{x})-\ln q(\vt{x}) \right] p(\vt{x})d\vt{x} \\
-		&= \int \left[ -\frac{D}{2}\ln 2\pi
-		-\frac{1}{2}\ln|\vt{\Sigma}|-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
-			\right. \nonumber \\
-			&\qquad \left.+\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{L}|
-			+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
-		\right]p(\vt{x})d\vt{x} \\
-		&=\int \left[
-			\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
-			-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
-			+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
-		\right]p(\vt{x})d\vt{x} \\
-		&=\mathbb{E}\left[
-			\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
-			-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
-			+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
-		\right] \\
-		&=\mathbb{E}\left[ \frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|} \right]
-		-\mathbb{E}\left[\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})\right]
-		+\mathbb{E}\left[\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})\right] \\
-		&=\frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|}
-		-\frac{1}{2}\mathbb{E}\left[
-			(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
-		\right]+\frac{1}{2}\mathbb{E}\left[
-			(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
-		\right] \\
-		&=\frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|}
-		-\frac{1}{2}\left[
-			(\vt{\mu}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{\mu}-\vt{\mu})
-			+\text{Tr}(\vt{\Sigma}^{-1}\vt{\Sigma})
-		\right]+\frac{1}{2}\left[
-			(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
-			+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
-		\right] \\
-		&=\frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|}
-		-\frac{1}{2}\text{Tr}(\vt{I})+\frac{1}{2}
-		(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
-		+\frac{1}{2}\text{Tr}(\vt{L}^{-1}\vt{\Sigma}) \\
-		&=\frac{1}{2}\left[
-			\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}-D
-			+(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
-			+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
-		\right]
-	\end{align}
-
 \item Entropy of a distribution $p$ is given by
     \begin{equation}
     \mathcal{H}(x) = - \int {p(x)\ln p(x)} dx\nonumber
     \end{equation}
     Derive the entropy of the multivariate Gaussian $\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma})$
-
-	\begin{align}
-		\mathcal{H}(\vt{x}) &= - \int {p(\vt{x})\ln p(\vt{x})} d\vt{x}\nonumber \\
-		&=-\mathbb{E}[\ln p(\vt{x})] \\
-		&=-\mathbb{E}\left[
-			-\frac{D}{2}\ln2\pi
-			-\frac{1}{2}\ln|\vt{\Sigma}|
-			-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
-		\right] \\
-		&=\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{\Sigma}|
-		+\frac{1}{2}\mathbb{E}[(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})] \\
-		&=\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{\Sigma}|+\frac{1}{2}\text{Tr}(\vt{I}) \\
-		&=\frac{1}{2}\left[ D\ln2\pi+\ln|\vt{\Sigma}|+D \right] \\
-		&=\frac{1}{2}(D\ln2\pi+\ln|\Sigma|+D\ln e) \\
-		&=\frac{1}{2}[\ln(2\pi)^D+\ln|\vt{\Sigma}|+\ln e^D] \\
-		&=\frac{1}{2}\ln[(2\pi e)^D |\vt{\Sigma}|]
-	\end{align}
-
 \end{enumerate}
 \end{problem}
+\begin{sol}
+	\begin{enumerate}
+		\item \begin{align}
+			\mathcal{KL}(p||q)
+			&= - \int {p(\vt{x})\ln \left\{{\frac{{q(\vt{x})}}{{p(\vt{x})}}}\right\}} d\vt{x} \nonumber \\
+			&= \int \left[ \ln p(\vt{x})-\ln q(\vt{x}) \right] p(\vt{x})d\vt{x} \\
+			&= \int \left[ -\frac{D}{2}\ln 2\pi
+			-\frac{1}{2}\ln|\vt{\Sigma}|-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+				\right. \nonumber \\
+				&\qquad \left.+\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{L}|
+				+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right]p(\vt{x})d\vt{x} \\
+			&=\int \left[
+				\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
+				-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+				+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right]p(\vt{x})d\vt{x} \\
+			&=\mathbb{E}\left[
+				\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
+				-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+				+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right] \\
+			&=\mathbb{E}\left[ \frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|} \right]
+			-\mathbb{E}\left[\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})\right]
+			+\mathbb{E}\left[\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})\right] \\
+			&=\frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|}
+			-\frac{1}{2}\mathbb{E}\left[
+				(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+			\right]+\frac{1}{2}\mathbb{E}\left[
+				(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right] \\
+			&=\frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|}
+			-\frac{1}{2}\left[
+				(\vt{\mu}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{\mu}-\vt{\mu})
+				+\text{Tr}(\vt{\Sigma}^{-1}\vt{\Sigma})
+			\right]+\frac{1}{2}\left[
+				(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
+				+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
+			\right] \\
+			&=\frac{1}{2}\ln\frac{|\vt{\Sigma}|}{|\vt{L}|}
+			-\frac{1}{2}\text{Tr}(\vt{I})+\frac{1}{2}
+			(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
+			+\frac{1}{2}\text{Tr}(\vt{L}^{-1}\vt{\Sigma}) \\
+			&=\frac{1}{2}\left[
+				\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}-D
+				+(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
+				+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
+			\right]
+		\end{align}
+		\item \begin{align}
+			\mathcal{H}(\vt{x}) &= - \int {p(\vt{x})\ln p(\vt{x})} d\vt{x}\nonumber \\
+			&=-\mathbb{E}[\ln p(\vt{x})] \\
+			&=-\mathbb{E}\left[
+				-\frac{D}{2}\ln2\pi
+				-\frac{1}{2}\ln|\vt{\Sigma}|
+				-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+			\right] \\
+			&=\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{\Sigma}|
+			+\frac{1}{2}\mathbb{E}[(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})] \\
+			&=\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{\Sigma}|+\frac{1}{2}\text{Tr}(\vt{I}) \\
+			&=\frac{1}{2}\left[ D\ln2\pi+\ln|\vt{\Sigma}|+D \right] \\
+			&=\frac{1}{2}(D\ln2\pi+\ln|\Sigma|+D\ln e) \\
+			&=\frac{1}{2}[\ln(2\pi)^D+\ln|\vt{\Sigma}|+\ln e^D] \\
+			&=\frac{1}{2}\ln[(2\pi e)^D |\vt{\Sigma}|]
+		\end{align}
+	\end{enumerate}
+\end{sol}
 
 \begin{problem}
 \begin{figure}[H]
@@ -165,8 +165,44 @@ Given a graphical model in Figure \ref{fig:hmm}. Show that:
 \item $p(\vt{x}_{n+1}, \dots, \vt{x}_N | \vt{z}_n,\vt{z}_{n+1}) = p(\vt{x}_{n+1}, \dots, \vt{x}_N | \vt{z}_{n+1})$
 \item $p(\vt{z}_{N+1}|\vt{z}_N,\vt{X}) = p(\vt{z}_{N+1}|\vt{z}_N)$, where $\vt{X} = \{\vt{x}_1, \dots,\vt{x}_N\}$
 \end{enumerate}
-
 \end{problem}
+\begin{sol}
+	\begin{enumerate}
+		\item If we condition on $\vt{z}_n$ then we have that for the d-separation
+			principle holds
+			\begin{equation}
+				\vt{x}_1,\dots,\vt{x}_{n-1} \ci \vt{x}_n \mid \vt{z}_n
+			\end{equation}
+			and therefore we can write
+			\begin{equation}
+				p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{x}_n,\vt{z}_n)=p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_n)
+			\end{equation}
+		\item If we condition on $\vt{z}_{n-1}$, for the d-separation principle we have that
+			\begin{equation}
+				\vt{x}_1,\dots,\vt{x}_{n-1} \ci \vt{z}_n \mid \vt{z}_{n-1}
+			\end{equation}
+			and therefore we can write
+			\begin{equation}
+				p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1},\vt{z}_n)=p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1})
+			\end{equation}
+		\item If we now condition on $\vt{z}_{n+1}$, for the d-separation principle we have that
+			\begin{equation}
+				\vt{x}_{n+1},\dots,\vt{x}_N \ci \vt{z}_n \mid \vt{z}_{n+1}
+			\end{equation}
+			and therefore we can write
+			\begin{equation}
+				p(\vt{x}_{n+1},\dots,\vt{x}_N|\vt{z}_n,\vt{z}_{n+1})=p(\vt{x}_{n+1},\dots,\vt{x}_N|\vt{z}_{n+1})
+			\end{equation}
+		\item If we condition on $\vt{z}_N$ then for the d-separation we can write
+			\begin{equation}
+				\vt{z}_{N+1} \ci \vt{X} \mid \vt{z}_N
+			\end{equation}
+			and therefore we can write
+			\begin{equation}
+				p(\vt{z}_{N+1}|\vt{z}_N,\vt{X})=p(\vt{z}_{N+1}|\vt{z}_N)
+			\end{equation}
+	\end{enumerate}
+\end{sol}
 
 \begin{problem}
 An edge $X \rightarrow Y$ in a graph $\mathcal{G}$ is said to be covered if $pa_Y = pa_X \cup \{X\}$.
