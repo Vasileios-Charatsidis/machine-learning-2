@@ -53,6 +53,10 @@ $a$ & $b$ & $c$ & $p(a,b,c)$\\
 Consider all the Bayesian networks consisting of three vertices $X$, $Y$ and $Z$. Group them into clusters such that all the graphs in each cluster encode the same set of independence relations. Draw those clusters and write down the set of independence relations for each cluster.
 \end{problem}
 
+
+$$$$
+
+
 \begin{problem}
 \begin{enumerate}
  \item Given distributions $p$ and $q$ of a continuous random variable, Kullback-Leibler divergence of $q$ from $p$ is defined as
@@ -67,6 +71,83 @@ Consider all the Bayesian networks consisting of three vertices $X$, $Y$ and $Z$
     Derive the entropy of the multivariate Gaussian $\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma})$
 \end{enumerate}
 \end{problem}
+\begin{sol}
+	\begin{enumerate}
+		\item \begin{align}
+			\mathcal{KL}(p||q)
+			&= - \int {p(\vt{x})\ln \left\{{\frac{{q(\vt{x})}}{{p(\vt{x})}}}\right\}} d\vt{x} \nonumber \\
+			&= \int \left[ \ln p(\vt{x})-\ln q(\vt{x}) \right] p(\vt{x})d\vt{x} \\
+			&= \int \left[ -\frac{D}{2}\ln 2\pi
+			-\frac{1}{2}\ln|\vt{\Sigma}|-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+				\right. \nonumber \\
+				&\qquad \left.+\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{L}|
+				+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right]p(\vt{x})d\vt{x} \\
+			&=\int \left[
+				\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
+				-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+				+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right]p(\vt{x})d\vt{x} \\
+			&=\Ex\left[
+				\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
+				-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+				+\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right] \\
+			&=\Ex\left[ \frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|} \right]
+			-\Ex\left[\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})\right]
+			+\Ex\left[\frac{1}{2}(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})\right] \\
+			&=\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
+			-\frac{1}{2}\Ex\left[
+				(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+			\right]+\frac{1}{2}\Ex\left[
+				(\vt{x}-\vt{m})^\trans\vt{L}^{-1}(\vt{x}-\vt{m})
+			\right] \\
+			&=\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
+			-\frac{1}{2}\left[
+				(\vt{\mu}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{\mu}-\vt{\mu})
+				+\text{Tr}(\vt{\Sigma}^{-1}\vt{\Sigma})
+			\right]+\frac{1}{2}\left[
+				(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
+				+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
+			\right] \\
+			&=\frac{1}{2}\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}
+			-\frac{1}{2}\text{Tr}(\vt{I})+\frac{1}{2}
+			(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
+			+\frac{1}{2}\text{Tr}(\vt{L}^{-1}\vt{\Sigma}) \\
+			&=\frac{1}{2}\left[
+				\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}-D
+				+(\vt{\mu}-\vt{m})^\trans\vt{L}^{-1}(\vt{\mu}-\vt{m})
+				+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
+			\right] \\
+			&=\frac{1}{2}\left[
+				\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}-D
+				+[(-1)(\vt{m}-\vt{\mu})^\trans\vt{L}^{-1}(-1)(\vt{m}-\vt{\mu})]
+				+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
+			\right] \\
+			&=\frac{1}{2}\left[
+				\ln\frac{|\vt{L}|}{|\vt{\Sigma}|}-D
+				+(\vt{m}-\vt{\mu})^\trans\vt{L}^{-1}(\vt{m}-\vt{\mu})
+				+\text{Tr}(\vt{L}^{-1}\vt{\Sigma})
+			\right]
+		\end{align}
+		\item \begin{align}
+			\mathcal{H}(\vt{x}) &= - \int {p(\vt{x})\ln p(\vt{x})} d\vt{x}\nonumber \\
+			&=-\Ex[\ln p(\vt{x})] \\
+			&=-\Ex\left[
+				-\frac{D}{2}\ln2\pi
+				-\frac{1}{2}\ln|\vt{\Sigma}|
+				-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})
+			\right] \\
+			&=\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{\Sigma}|
+			+\frac{1}{2}\Ex[(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})] \\
+			&=\frac{D}{2}\ln2\pi+\frac{1}{2}\ln|\vt{\Sigma}|+\frac{1}{2}\text{Tr}(\vt{I}) \\
+			&=\frac{1}{2}\left[ D\ln2\pi+\ln|\vt{\Sigma}|+D \right] \\
+			&=\frac{1}{2}(D\ln2\pi+\ln|\vt{\Sigma}|+D\ln e) \\
+			&=\frac{1}{2}[\ln(2\pi)^D+\ln|\vt{\Sigma}|+\ln e^D] \\
+			&=\frac{1}{2}\ln[(2\pi e)^D |\vt{\Sigma}|]
+		\end{align}
+	\end{enumerate}
+\end{sol}
 
 \begin{problem}
 \begin{figure}[H]
@@ -98,8 +179,52 @@ Given a graphical model in Figure \ref{fig:hmm}. Show that:
 \item $p(\vt{x}_{n+1}, \dots, \vt{x}_N | \vt{z}_n,\vt{z}_{n+1}) = p(\vt{x}_{n+1}, \dots, \vt{x}_N | \vt{z}_{n+1})$
 \item $p(\vt{z}_{N+1}|\vt{z}_N,\vt{X}) = p(\vt{z}_{N+1}|\vt{z}_N)$, where $\vt{X} = \{\vt{x}_1, \dots,\vt{x}_N\}$
 \end{enumerate}
-
 \end{problem}
+\begin{sol}
+	\begin{enumerate}
+		\item If we condition on $\vt{z}_n$ then we have that for the d-separation
+			principle holds
+			\begin{equation}
+				\vt{x}_1,\dots,\vt{x}_{n-1} \ci \vt{x}_n \mid \vt{z}_n
+			\end{equation}
+			because every path connecting $\vt{x}_1,\dots,\vt{x}_{n-1}$ with
+			$\vt{x}_n$ is blocked by $\vt{z}_n$ (they are all head-to-tail edges)
+			and therefore we can write
+			\begin{equation}
+				p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{x}_n,\vt{z}_n)=p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_n)
+			\end{equation}
+		\item If we condition on $\vt{z}_{n-1}$, we have that
+			all paths connecting a node in $\vt{x}_1,\dots,\vt{x}_{n-1}$ with $\vt{z}_n$
+			are blocked by $\vt{z}_{n-1}$ and for the d-separation principle we have
+			\begin{equation}
+				\vt{x}_1,\dots,\vt{x}_{n-1} \ci \vt{z}_n \mid \vt{z}_{n-1}
+			\end{equation}
+			and therefore we can write
+			\begin{equation}
+				p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1},\vt{z}_n)=p(\vt{x}_1,\dots,\vt{x}_{n-1}|\vt{z}_{n-1})
+			\end{equation}
+		\item If we now condition on $\vt{z}_{n+1}$, all paths connecting a node in
+			$\vt{x}_{n+1},\dots,\vt{x}_N$ with $\vt{z}_n$ are blocked by
+			$\vt{z}_{n+1}$. For the d-separation principle we have that
+			\begin{equation}
+				\vt{x}_{n+1},\dots,\vt{x}_N \ci \vt{z}_n \mid \vt{z}_{n+1}
+			\end{equation}
+			and therefore we can write
+			\begin{equation}
+				p(\vt{x}_{n+1},\dots,\vt{x}_N|\vt{z}_n,\vt{z}_{n+1})=p(\vt{x}_{n+1},\dots,\vt{x}_N|\vt{z}_{n+1})
+			\end{equation}
+		\item If we condition on $\vt{z}_N$ then we have that
+			all paths connecting $\vt{z}_{N+1}$ with a node in $\vt{X}$
+			are blocked by $\vt{z}_N$. For the d-separation we can then write
+			\begin{equation}
+				\vt{z}_{N+1} \ci \vt{X} \mid \vt{z}_N
+			\end{equation}
+			and therefore we can write
+			\begin{equation}
+				p(\vt{z}_{N+1}|\vt{z}_N,\vt{X})=p(\vt{z}_{N+1}|\vt{z}_N)
+			\end{equation}
+	\end{enumerate}
+\end{sol}
 
 \begin{problem}
 An edge $X \rightarrow Y$ in a graph $\mathcal{G}$ is said to be covered if $pa_Y = pa_X \cup \{X\}$.
@@ -109,4 +234,87 @@ An edge $X \rightarrow Y$ in a graph $\mathcal{G}$ is said to be covered if $pa_
 %\moditem{$\star$} Now, prove that for every pair of I-equivalent networks $\mathcal{G}$ and $\mathcal{G}'$, there exists a sequence of covered edge reversal operations that converts $\mathcal{G}$ and $\mathcal{G}'$. Your proof should show how to construct this sequence.
 \end{modenumerate}
 \end{problem}
+\begin{sol}
+	\begin{enumerate}
+		\item
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}
+					\node[nObs,] (w1) at (0,0) {$W_1$};
+					\node[nObs,] (zi) at (1.5,0) {$Z_i$};
+					\draw[->] (w1) -- (zi);
+					\node[nObs,] (x) at (1.5,-1.5) {$X$};
+					\draw[->] (zi) -- (x);
+					\node[nObs,] (y) at (3,-1.5) {$Y$};
+					\draw[->] (zi) -- (y);
+					\draw[->] (x) -- (y);
+					\node[nObs,] (w2) at (4.5,-1.5) {$W_2$};
+					\draw[->] (y) -- (w2);
+					\node[rectangle, inner sep=-0.5mm, fit=(zi), label=above right:N]{};
+					\node[rectangle, inner sep=4.4mm, fit=(zi), draw=black!100]{};
+				\end{tikzpicture}
+				\caption{DAG with a cover edge $X \rightarrow Y$}
+				\label{fig:cover}
+			\end{figure}
+			In Figure \ref{fig:cover} is shown a generic DAG
+			$\mathcal{G}$ with a cover edge $X \rightarrow Y$. It is easy
+			to see that it is the maximal generalization for which we can
+			have a cover edge in $X \rightarrow Y$ because adding nodes
+			and connections to $X$ and not to $Y$ (directed towards) would
+			result in losing the cover edge property. Also adding nodes
+			similar to $W_1$ or $W_2$, or changing the direction of their
+			edges would not result in a different set of independent
+			relations given a change in the direction of the cover edge.
+			We can see that the only set of independent relations are
+			\begin{equation}
+				W_1,Z_1,\dots,Z_N \ci W_2 \mid Y
+			\end{equation}
+			If we change the direction of the cover edge only, the set of independent
+			relations will remain the same because the blocking node $Y$ has always
+			head-to-tail and tail-to-tail edges.
+
+			In the case where $Y$ has no descendant nodes, the graph
+			$\mathcal{G}$ doesn't encode any set of independent relations and the same
+			holds for $\mathcal{G}'$.
+
+			We can then conclude that if $X \rightarrow Y$ is a cover edge, the graph
+			$\mathcal{G}$ will encode the same set of independent relations as
+			$\mathcal{G}'$.
+
+		\item
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}
+					\node[nObs,] (w1) at (0,0) {$W_1$};
+					\node[nObs,] (zi) at (1.5,0) {$Z_i$};
+					\draw[->] (w1) -- (zi);
+					\node[nObs,] (x) at (1.5,-1.5) {$X$};
+					\draw[->] (zi) -- (x);
+					\node[nObs,] (y) at (3,-1.5) {$Y$};
+					\draw[->] (zi) -- (y);
+					\draw[->] (x) -- (y);
+					\node[nObs,] (w2) at (4.5,-1.5) {$W_2$};
+					\draw[->] (w2) -- (y);
+					\node[rectangle, inner sep=-0.5mm, fit=(zi), label=above right:N]{};
+					\node[rectangle, inner sep=4.4mm, fit=(zi), draw=black!100]{};
+				\end{tikzpicture}
+				\caption{DAG \emph{without} a cover edge in $X \rightarrow Y$}
+				\label{fig:cover-counter}
+			\end{figure}
+			In Figure \ref{fig:cover-counter} is shown a graph without any cover edge.
+			In this case, if we condition on $X$, then for d-separation we have
+			\begin{equation}
+				W_1,Z_1,\dots,Z_N \ci W_2 \mid X
+			\end{equation}
+			because all paths meet at $Y$ head-to-head but neither $Y$ nor its
+			descentants are in the conditioning set $\{X\}$.
+
+			Now suppose we reverse the edge $X \rightarrow Y$. In this case the set of
+			independent relations is the empty set because now the paths meet at $Y$
+			head-to-head but its descendant ($X$) is in the conditioning set,
+			concluding that if $X \rightarrow Y$ is not a cover edge, reversing it
+			will not result in the same set of independent relations being encoded in
+			the DAG $\mathcal{G}'$.
+	\end{enumerate}
+\end{sol}
 \end{document}
