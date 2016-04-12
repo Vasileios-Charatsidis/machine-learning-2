@@ -221,35 +221,86 @@ An edge $X \rightarrow Y$ in a graph $\mathcal{G}$ is said to be covered if $pa_
 \end{modenumerate}
 \end{problem}
 \begin{sol}
-	\begin{figure}[H]
-		\centering
-		\begin{tikzpicture}
-			\node[nObs,] (w1) at (0,0) {$W_1$};
-			\node[nObs,] (zi) at (1.5,0) {$Z_i$};
-			\draw[->] (w1) -- (zi);
-			\node[nObs,] (x) at (1.5,-1.5) {$X$};
-			\draw[->] (zi) -- (x);
-			\node[nObs,] (y) at (3,-1.5) {$Y$};
-			\draw[->] (zi) -- (y);
-			\draw[->] (x) -- (y);
-			\node[nObs,] (w2) at (4.5,-1.5) {$W_2$};
-			\draw[->] (y) -- (w2);
-			\node[rectangle, inner sep=-0.5mm, fit=(zi), label=above right:N]{};
-			\node[rectangle, inner sep=4.4mm, fit=(zi), draw=black!100]{};
-		\end{tikzpicture}
-		\caption{DAG with a cover edge $X \rightarrow Y$}
-		\label{fig:cover}
-	\end{figure}
 	\begin{enumerate}
-					\item In Figure \ref{fig:cover} is shown a generic DAG
-									$\mathcal{G}$ with a cover edge $X \rightarrow Y$. It is easy
-									to see that it is the maximal generalization for which we can
-									have a cover edge in $X \rightarrow Y$ because adding nodes
-									and connections to $X$ and not to $Y$ (directed towards) would
-									result in losing the cover edge property. Also adding nodes
-									similar to $W_1$ or $W_2$, or changing the direction of their
-									edges would not result in a different set of independent
-									relations.
+		\item
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}
+					\node[nObs,] (w1) at (0,0) {$W_1$};
+					\node[nObs,] (zi) at (1.5,0) {$Z_i$};
+					\draw[->] (w1) -- (zi);
+					\node[nObs,] (x) at (1.5,-1.5) {$X$};
+					\draw[->] (zi) -- (x);
+					\node[nObs,] (y) at (3,-1.5) {$Y$};
+					\draw[->] (zi) -- (y);
+					\draw[->] (x) -- (y);
+					\node[nObs,] (w2) at (4.5,-1.5) {$W_2$};
+					\draw[->] (y) -- (w2);
+					\node[rectangle, inner sep=-0.5mm, fit=(zi), label=above right:N]{};
+					\node[rectangle, inner sep=4.4mm, fit=(zi), draw=black!100]{};
+				\end{tikzpicture}
+				\caption{DAG with a cover edge $X \rightarrow Y$}
+				\label{fig:cover}
+			\end{figure}
+			In Figure \ref{fig:cover} is shown a generic DAG
+			$\mathcal{G}$ with a cover edge $X \rightarrow Y$. It is easy
+			to see that it is the maximal generalization for which we can
+			have a cover edge in $X \rightarrow Y$ because adding nodes
+			and connections to $X$ and not to $Y$ (directed towards) would
+			result in losing the cover edge property. Also adding nodes
+			similar to $W_1$ or $W_2$, or changing the direction of their
+			edges would not result in a different set of independent
+			relations given a change in the direction of the cover edge.
+			We can see that the only set of independent relations are
+			\begin{equation}
+				W_1,Z_1,\dots,Z_N \ci W_2 \mid Y
+			\end{equation}
+			If we change the direction of the cover edge only, the set of independent
+			relations will remain the same because the blocking node $Y$ has always
+			head-to-tail and tail-to-tail edges.
+
+			In the case where $Y$ has no descendant nodes, the graph
+			$\mathcal{G}$ doesn't encode any set of independent relations and the same
+			holds for $\mathcal{G}'$.
+
+			We can then conclude that if $X \rightarrow Y$ is a cover edge, the graph
+			$\mathcal{G}$ will encode the same set of independent relations as
+			$\mathcal{G}'$.
+
+		\item
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}
+					\node[nObs,] (w1) at (0,0) {$W_1$};
+					\node[nObs,] (zi) at (1.5,0) {$Z_i$};
+					\draw[->] (w1) -- (zi);
+					\node[nObs,] (x) at (1.5,-1.5) {$X$};
+					\draw[->] (zi) -- (x);
+					\node[nObs,] (y) at (3,-1.5) {$Y$};
+					\draw[->] (zi) -- (y);
+					\draw[->] (x) -- (y);
+					\node[nObs,] (w2) at (4.5,-1.5) {$W_2$};
+					\draw[->] (w2) -- (y);
+					\node[rectangle, inner sep=-0.5mm, fit=(zi), label=above right:N]{};
+					\node[rectangle, inner sep=4.4mm, fit=(zi), draw=black!100]{};
+				\end{tikzpicture}
+				\caption{DAG \emph{without} a cover edge in $X \rightarrow Y$}
+				\label{fig:cover-counter}
+			\end{figure}
+			In Figure \ref{fig:cover-counter} is shown a graph without any cover edge.
+			In this case, if we condition on $X$, then for d-separation we have
+			\begin{equation}
+				W_1,Z_1,\dots,Z_N \ci W_2 \mid X
+			\end{equation}
+			because all paths meet at $Y$ head-to-head but neither $Y$ nor its
+			descentants are in the conditioning set $\{X\}$.
+
+			Now suppose we reverse the edge $X \rightarrow Y$. In this case the set of
+			independent relations is the empty set because now the paths meet at $Y$
+			head-to-head but its descendant ($X$) is in the conditioning set,
+			concluding that if $X \rightarrow Y$ is not a cover edge, reversing it
+			will not result in the same set of independent relations being encoded in
+			the DAG $\mathcal{G}'$.
 	\end{enumerate}
 \end{sol}
 \end{document}
