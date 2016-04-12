@@ -5,7 +5,7 @@
 % v.01, November 01, 2014
 
 % Modified by Andrea Jemmett
-% v.01.01, April 11, 2016
+% v.01.02, April 12, 2016
 
 \ProvidesClass{amsml}
 \LoadClass[11pt,letterpaper]{article}
@@ -44,6 +44,7 @@
 \usetikzlibrary{snakes}
 \tikzstyle{nObs}=[circle,draw=black, inner sep=0pt,minimum size=6mm]
 \tikzstyle{obs}=[circle,draw=black, fill=black!10,text=black, inner sep=0pt,minimum size=6mm]
+\tikzstyle{fact}=[rectangle, draw =none, fill=red, thick, minimum width=3mm,minimum height=3mm]
 
 \usepackage{hyperref}
 \hypersetup{pdftex, colorlinks=true, allcolors=blue}
