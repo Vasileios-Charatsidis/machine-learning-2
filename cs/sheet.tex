@@ -1,0 +1,31 @@
+\documentclass[a4paper,twocolumn]{amsmlaj}
+\usepackage{anysize}
+\usepackage[fontsize=8pt]{scrextend}
+\usepackage{lipsum}
+
+\author{Andrea Jemmett}
+\title{Machine Learning 2 - Cheat Sheet}
+\date{\today}
+
+\pagenumbering{gobble}
+\marginsize{.2in}{.2in}{0in}{0in}
+
+\makeatletter
+\def\maketitle{
+	\par\textbf{\@title}
+	\par{\@author\quad-\quad\small{\@date}}
+\par}
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\section{Test}
+\lipsum[1]
+
+\section{Test 2}
+\lipsum[5-8]
+
+\end{document}
+
