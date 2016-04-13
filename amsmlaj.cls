@@ -5,9 +5,11 @@
 % v.01, November 01, 2014
 
 % Modified by Andrea Jemmett
-% v.01.02, April 12, 2016
+% v.01.03, April 13, 2016
 
-\ProvidesClass{amsml}
+\ProvidesClass{amsmlaj}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+\ProcessOptions\relax
 \LoadClass[11pt,letterpaper]{article}
 
 % page setup
@@ -21,7 +23,7 @@
 
 \textwidth 6.5in
 \usepackage[T1]{fontenc}
-%\usepackage{babel}
+\usepackage[english]{babel}
 \usepackage{amsfonts,amssymb}
 \usepackage{enumerate}
 \usepackage{amsmath}
