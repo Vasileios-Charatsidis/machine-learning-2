@@ -3,6 +3,7 @@
 \usepackage[fontsize=9pt]{scrextend}
 \usepackage{multicol}
 
+
 \author{Andrea Jemmett}
 \title{Machine Learning 2 - Cheat Sheet}
 \date{\today}
@@ -26,16 +27,21 @@
 \renewcommand{\section}{\@startsection{section}{1}{0mm}
 	{-0ex plus -.1ex minus -.5ex}
 	{0.1ex plus .7ex}
-	{\normalfont\normalsize\bfseries}}
+	{\normalfont\large\bfseries}}
 \renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}
 	{-1ex plus -.5ex minus -.2ex}
 	{0.1ex plus .2ex}
-	{\normalfont\footnotesize\bfseries}}
+	{\normalfont\normalsize\bfseries}}
 \renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}
 	{-1ex plus -.5ex minus -.2ex}
 	{0.1ex plus .2ex}
-	{\normalfont\scriptsize\bfseries}}
+	{\normalfont\footnotesize\bfseries}}
 \makeatother
+
+% \tikzcircle command to create circles in text
+\newcommand{\tikzcircle}[2][black]{
+	\tikz[baseline=-0.5ex]\draw[#1,radius=#2](0,0) circle ;
+}
 
 \begin{document}
 \maketitle
@@ -157,6 +163,94 @@ $\mathbb{E}(\mathbf{x}) =
 \frac{|\Lambda|^{1/2}}{(\pi v)^{D/2}} \int
 [1+\frac{(x-\mu)^T \Lambda
 (x-\mu)}{v}]^{-D/2-v/2}x\mathrm{d}x   $
+
+\section{Graphical Models}
+Capture noise, for reasoning, enormous datasets, for causality, for designing
+models, CIR are encoded in the graph, for inference.
+
+\subsection{Directed GMs a.k.a. Bayesian Networks}
+Nodes are connected by \textit{directed} arrows. The full joint distribution is\\
+$p(\vt{x})=\prod_{k=1}^K p(x_k|\text{pa}(x_k))$ \\
+\textbf{Directed Acyclic Graphs} are BNs without \textit{directed} loops.
+
+\subsubsection{Blocking Rules}
+$\displaystyle \tikzcircle{3pt} \rightarrow \tikzcircle[fill=gray]{3pt}\rightarrow \tikzcircle{3pt}\qquad
+\displaystyle \tikzcircle{3pt} \leftarrow \tikzcircle[fill=gray]{3pt} \rightarrow \tikzcircle{3pt}\qquad
+\displaystyle \tikzcircle{3pt} \rightarrow \cdots \tikzcircle{3pt} \cdots \leftarrow \tikzcircle{3pt}$
+
+\subsubsection{D-separation}
+$A \ci B \mid C$ holds if each path that connects a node in $A$ with a node in
+$B$ is \textit{blocked}, that is \\
+\textbf{a)} the arrows on the path meet either head-to-tail or tail-to-tail
+at the node and the node is in $C$, \textit{or} \\
+\textbf{b)} the arrows meed head-to-head at the node and either the
+node nor any of its descendants is in $C$.
+
+\subsection{Markov Random Fields}
+Graphical Models with undirected edges (a.k.a. Undirected Graphical Models).
+
+\subsubsection{Conditional Independence}
+$A \ci B \mid C$ holds if all paths connecting every node in $A$ to every other
+node in $B$ is 'blocked' by a node in $C$ (blocked means passing through).
+
+\subsubsection{Cliques and Maximal Cliques}
+A \textit{clique} is a subset of nodes in the graph such that there exists a link between
+all pairs of nodes in the subset (the set of nodes in a clique is fully connected).
+A \textit{maximal clique} is a clique such that it is not possible to include
+any other nodes from the graph in without it ceasing to be a clique.
+
+\subsubsection{Factorization}
+A MRF can be factorized using \textit{potential functions} over its maximal
+cliques: $p(\vt{x})=\frac{1}{Z}\prod_C \psi_C(\vt{x}_C)$ \quad
+$Z=\sum_x \prod_C \psi_C(\vt{x}_C)$
+
+\subsubsection{Relation to Directed Graphs}
+To transform a directed graph into an undirected one we have to perform a
+\textit{moralization} process of ``marrying the parents'' of each node
+(by linking them) and removing all remaining arrows.
+
+\subsection{Markov Blanket}
+$p(x_i|x_{\text{MB}_i},x_\text{rest})=p(x_i|x_{\text{MB}_i})$ \\
+\textbf{Directed case}: The MB of $x_i$ consists of: the parents of $x_i$, the
+children of $x_i$ and the co-parents of the children of $x_i$.\\
+\textbf{Undirected case}: All neighboring nodes of $x_i$.
+
+\subsection{Inference in Graphical Models}
+In which some of the variables are observed and we wish to compute the posterior
+distribution of one or more subsets of other variables.
+
+\subsubsection{Inference on a chain}
+$p(\vt{x})=p(x_1,\ldots,x_N)$\\
+$ = \frac{1}{Z}\psi_{1,2}(x_1,x_2)\ldots\psi_{N-1,N}(x_{N-1},x_N)$\\
+$ = \sum_{x_1}\sum_{x_2}\ldots\sum_{x_{N-1}}\sum_{x_N}p(\vt{x})$\\
+$ = \sum_{x_1} \ldots \sum_{x_{n-1}} \sum_{x_{n+1}}\ldots \sum_{x_{N-1}} \sum_{x_{N}} p(\vt{x})$\\
+$ = \frac{1}{Z}\sum_{x_1}\ldots\sum_{x_{n-1}}\psi_{x_1,x_2}\ldots\psi_{x_{n-1},x_n} \mu_\beta(x_n)$\\
+$\mu_\beta(x_n) = \frac{1}{Z} \sum_{x_{n+1}}\psi_{x_{n},x_{n+1}} \ldots \sum_{x_N}\psi_{x_{N-1},x_{N}}$\\
+$\mu_\alpha(x_n) = \frac{1}{Z} \sum_{x_{n-1}}\psi_{x_{n-1},x_{n}} \ldots \sum_{x_1}\psi_{x_{2},x_{1}}$\\
+$p(x_n) = \frac{1}{z} \mu_\alpha(x_n) \mu_\beta(x_n)$ \qquad $O(NK^2)$
+
+\subsubsection{Factor Graphs}
+A tree is a graph with no loops. Both directed and undirected trees can be
+converted to a factor graph tree, but a directed tree could result in a non-tree
+structure when converted to an undirected representation. It is called a
+poly-tree (and not simply a tree) since its undirected representation (middle
+graph) includes a loop. The factor graph representation is again a tree. Factor
+graphs are the most general representation, and since any other tree
+representation can be easily converted to a factor tree, the sum-product
+algorithm is defined for factor trees.
+
+\subsubsection{Sum-product algorithm}
+Probability of the factor graph: $p(\vec{x}) = \frac{1}{Z}\prod_\alpha f_\alpha(\vec{x}_\alpha)$\\
+\textbf{factor $\rightarrow$ variable message}
+$\displaystyle \mu_{\alpha\rightarrow i}(x_i) =
+\sum_{x_{\alpha \smallsetminus i}}f_\alpha (\vec{x}_\alpha) \prod_{j\in \alpha \smallsetminus i}\mu_{j\rightarrow \alpha}$\\
+\textbf{variable $\rightarrow$ factor message}
+$\displaystyle \mu_{j\rightarrow \alpha}(x_j) =
+\prod_{\beta \in \mathrm{ne}(j)\smallsetminus\alpha} \mu_{\beta\rightarrow j}(x_j)$\\
+\begin{tabular}{@{}llll}\\
+	\textbf{leaf node messages}& $x_l$ & is a leaf node: & $\mu_{l\rightarrow \delta}(x_l) = 1$\\
+	&$\varepsilon$ & is a leaf node: & $\mu_{\varepsilon\rightarrow k}(x_k) = f_\varepsilon(x_k)$
+\end{tabular}
 
 
 \end{multicols*}
