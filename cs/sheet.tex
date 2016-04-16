@@ -1,6 +1,6 @@
 \documentclass[a4paper,landscape]{amsmlaj}
 \usepackage{anysize}
-\usepackage[fontsize=8pt]{scrextend}
+\usepackage[fontsize=9pt]{scrextend}
 \usepackage{multicol}
 
 \author{Andrea Jemmett}
@@ -24,17 +24,17 @@
 }
 % Redefine sections
 \renewcommand{\section}{\@startsection{section}{1}{0mm}
-	{-0ex plus -.9ex minus -.5ex}
-	{0.1ex plus .2ex}%x
-	{\normalfont\small\bfseries}}
+	{-0ex plus -.1ex minus -.5ex}
+	{0.1ex plus .7ex}
+	{\normalfont\normalsize\bfseries}}
 \renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}
 	{-1ex plus -.5ex minus -.2ex}
 	{0.1ex plus .2ex}
 	{\normalfont\footnotesize\bfseries}}
-\renewcommand{\subsubsection}{\@startsection{subsection}{2}{0mm}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}
 	{-1ex plus -.5ex minus -.2ex}
 	{0.1ex plus .2ex}
-	{\normalfont\footnotesize\bfseries}}
+	{\normalfont\scriptsize\bfseries}}
 \makeatother
 
 \begin{document}
@@ -45,34 +45,46 @@
 \setlength{\multicolsep}{1pt}
 \setlength{\columnsep}{2pt}
 
+\section{Probability Theory}
+\subsection{Independence}
+$p(X,Y)=p(X)p(Y) \Leftrightarrow p(X|Y)=p(X) \Leftrightarrow p(Y|X)=p(Y)$
+\subsection{Conditional Independence}
+$X \ci Y \mid Z \Longleftrightarrow p(X,Y|Z)=p(X|Z)p(Y|Z)$
+\subsection{Sum and Product Rules}
+$p(X,Y)=p(X)p(Y|X)$, \qquad $p(X,Y,Z)=p(X)p(Y|X)p(Z|X,Y)$ \\
+$p(X)=\sum_Y p(X,Y)$
+\subsection{Bayes' Theorem}
+$p(Y|X)=\frac{p(X|Y)p(Y)}{p(X)}$, \qquad
+$p(Y|X,Z)=\frac{p(X|Y,Z)p(Y|Z)}{p(X|Z)}$
+
 \section{Distributions}
 \begin{tabular}{l|lll}
 	\textbf{Binary} & Bernoulli & Binomial & Beta\\
 	\textbf{Discrete} & Categorical & Multinomial & Dirichlet
 \end{tabular}
 
-\subsection{Bernoulli}
+\subsection{Bernoulli Distribution}
 $\mathrm{Ber}(x|n) = \mu^x(1-\mu)^{1-x}$, \qquad
 $\Ex[x]=\mu$, \qquad
 $\Var[x] = \mu -\mu^2$, \\
 $P(D,\mu) = \prod_{n=1}^N \mu^{x_n}(1 - \mu)^{1-x_n}$, \qquad
 $\mu_\text{ML} = \frac{1}{N} \sum_{n=1}^N x_n$
 
-\subsection{Binomial}
+\subsection{Binomial Distribution}
 $\mathrm{Bin}(m|N,\mu) = \binom{N}{m} \mu^m(1-\mu)^{N-m}$, \qquad
 $\frac{n!}{k!(n-k)!} = \binom{n}{k}$, \\
 $\Ex[m] = N\mu$, \qquad
 $\Var[m] = N\mu(1-\mu)$, \qquad
 $\mu_\text{ML} = \frac{m}{N}$
 
-\subsection{Categorical}
+\subsection{Categorical Distribution}
 $p(\vt{x}|\vt{\mu}) = \prod_{k} \mu_k^{x_k}$, \qquad
 $\vt{\mu} \in \{0,1\}^K$, \qquad
 $\sum_k \mu_k = 1$, \qquad
 $\vt{\mu}_\text{ML} = \frac{\vt{m}}{N}$, \\
 $m_k = \sum_n x_{nk}$, \qquad
 $\mathrm{Mult}(m_1 \ldots, m_k|N, \vt{\mu}) = (\frac{N!}{m_1!,\ldots,m_k} \prod_{k}) \mu_k^{mk}$
-\subsection{Beta}
+\subsection{Beta Distribution}
 $\mathrm{Beta}(\mu|a,b) = \frac{\Gamma(a + b)}{\Gamma(a)\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1}$,
 \footnote{
 	$\Gamma(x) = \int_0^1 u^{x-1}e^{-u} = 1$, \qquad
@@ -91,43 +103,43 @@ $\mathrm{mode}[\tau] = \frac{a-1}{b}$ for $a \ge 1$, \qquad
 $\Ex[\ln \tau] = \psi(a) - \ln b$, \\
 $H(\tau) = ln \Gamma(a) - (a-1)\psi(a) - \ln b + a$
 
-\subsection{Multinomial Distributions}
-$\mathbf{x} = \lbrace 0,0,0,0,1,0,0 \rbrace^T$,
-$\sum_{k=1}^K x_k = 1$,
-$p(x|\mu) = \prod_{k=1}^K \mu_k^{x_k}$,
-$\sum_{k=1}^K \mu_k = 1$,
-$\mu_{ML} = \frac{m}{N}$,
+\subsection{Multinomial Distribution}
+$\vt{x} = [0,0,0,0,1,0,0]^\trans$, \qquad
+$\sum_{k=1}^K x_k = 1$, \qquad
+$p(\vt{x}|\vt{\mu}) = \prod_{k=1}^K \mu_k^{x_k}$, \\
+$\sum_{k=1}^K \mu_k = 1$, \qquad
+$\mu_k^\text{ML} = \frac{m_k}{N}$, \qquad
 $m_k = \sum_{k=1}^K x_{nk}$
 
-\subsection{Dirichlet}
-$\mathrm{Dir}(\mu|\alpha) = \frac{\Gamma(\sum_k a_k)}{\Gamma{a_1} \ldots
-\Gamma{a_k}} \prod_{k=1}^K\mu_k^{a_k-1}$
+\subsection{Dirichlet Distribution}
+$\mathrm{Dir}(\vt{\mu}|\vt{\alpha}) =
+	\frac{\Gamma(\alpha_0)}{\Gamma(\alpha_1) \cdots \Gamma(\alpha_k)}
+	\prod_{k=1}^K \mu_k^{\alpha_k-1}$, \qquad
+$\alpha_0 = \sum_{k=1}^K \alpha_k$
 
-\subsection{Gaussian}
-$\mathcal{N}(x|\mu,\sigma) = \frac{1}{\sqrt{2 \pi
-\sigma^2}}\exp(-\frac{1}{2\sigma^2}(x-\mu)^2)$,\\
-$\mathcal{N}(x|\mu,\Sigma) = \frac{1}{(2\pi)^{D/2}}
-\frac{1}{\sqrt{|\Sigma|}} \exp(-\frac{1}{2}(x-\mu)^T) \Sigma^{-1}
-(x-\mu))$
+\subsection{Gaussian Distribution}
+$\distNorm(x|\mu,\sigma) = \frac{1}{\sqrt{2 \pi\sigma^2}}\exp(-\frac{1}{2\sigma^2}(x-\mu)^2)$,\\
+$\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma}) = (2\pi)^{-\frac{D}{2}}|\vt{\Sigma}|^{-\frac{1}{2}}
+	\exp\left\{-\frac{1}{2}(\vt{x}-\vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}-\vt{\mu})\right\}$
 
-\subsection{ML for the Gaussian}
-$\ln p(X|\mu, \Sigma) = -\frac{ND}{2}\ln(2\pi) - \frac{N}{2}\ln|\Sigma|
-- \frac{1}{2}\sum_{n=1}^N (x_n - \mu)^T \Sigma^{-1} (x_n - \mu)$,
-$\mu_{ML} = 1/N \sum_{n=1}^N x_n$,
-$\Sigma_{ML} = 1/N \sum_{n=1}^N (x_n - \mu)^T (x_n - \mu)$
+\subsubsection{ML for the Gaussian}
+$\ln p(X|\vt{\mu},\vt{\Sigma}) = -\frac{ND}{2}\ln(2\pi) - \frac{N}{2}\ln|\vt{\Sigma}|
+	-\frac{1}{2}\sum_{n=1}^N (\vt{x}_n - \vt{\mu})^\trans\vt{\Sigma}^{-1}(\vt{x}_n - \vt{\mu})$,\\
+$\vt{\mu}_\text{ML} = 1/N \sum_{n=1}^N \vt{x}_n$, \qquad
+$\vt{\Sigma}_\text{ML} = 1/N \sum_{n=1}^N (\vt{x}_n - \vt{\mu})^\trans (\vt{x}_n - \vt{\mu})$
 
 \subsubsection{Stochastic gradient descent Gaussian}
 $\max\ P(x_1,\cdots,x_n|\theta)$,
-$\theta^N = \theta^{N-1} + \alpha_{N-1} \frac{\partial}{\partial
-\theta^{N-1}}
-\ln\ p(x_n|\theta^{N-1})$
+$\theta^N = \theta^{N-1} + \alpha_{N-1} \frac{\partial}{\partial\theta^{N-1}} \ln\ p(x_n|\theta^{N-1})$
 
-\subsection{Marginal and Conditional Gaussians}
-Given $p(x) = \mathcal{N}(x | \mu, \Lambda^{-1})$ and $p(y|x) =
-\mathcal{N}(y | Ax + b, L^{-1})$. We get $p(y) = \mathcal{N}(y |
-A\mu + b, L^{-1} + A \Lambda^{-1} A^T)$ and $p(x|y) =
-\mathcal{N}(x | \Sigma\{ A^T L (y-b) + \Lambda \mu \}, \Sigma)$,
-where $\Sigma = (\Lambda + A^T L A)^{-1}$.
+\subsubsection{Marginal and Conditional Gaussians}
+Given $p(\vt{x}) = \distNorm(\vt{x}|\vt{\mu},\vt{\Lambda}^{-1})$ and
+$p(\vt{y}|\vt{x}) = \distNorm(\vt{y}|\vt{Ax}+\vt{b}, \vt{L}^{-1})$. We get \\
+$p(\vt{y}) =
+\distNorm(\vt{y}|\vt{A\mu}+\vt{b},\vt{L}^{-1}+\vt{A}\vt{\Lambda}^{-1}\vt{A}^\trans)$ and \\
+$p(\vt{x}|\vt{y}) =
+\distNorm(\vt{x}|\vt{\Sigma}[\vt{A}^\trans\vt{L}(\vt{y}-\vt{b})+\vt{\Lambda}\vt{\mu}],\vt{\Sigma})$ \\
+where $\vt{\Sigma} = (\vt{\Lambda}+\vt{A}^\trans\vt{L}\vt{A})^{-1}$.
 
 \subsection{Student's T distribution}
 The heavy tail of the student-t distribution makes it more
