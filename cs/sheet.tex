@@ -1,31 +1,152 @@
-\documentclass[a4paper,twocolumn]{amsmlaj}
+\documentclass[a4paper,landscape]{amsmlaj}
 \usepackage{anysize}
 \usepackage[fontsize=8pt]{scrextend}
-\usepackage{lipsum}
+\usepackage{multicol}
 
 \author{Andrea Jemmett}
 \title{Machine Learning 2 - Cheat Sheet}
 \date{\today}
 
 \pagenumbering{gobble}
-\marginsize{.2in}{.2in}{0in}{0in}
+\marginsize{.2in}{.2in}{-.2in}{-.2in}
+
+% Turn off header and footer
+\pagestyle{empty}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
 
 \makeatletter
+% Redefine maketitle
 \def\maketitle{
-	\par\textbf{\@title}
-	\par{\@author\quad-\quad\small{\@date}}
-\par}
+	\textbf{\@title} \\
+	\@author\quad-\quad\small{\@date}
+}
+% Redefine sections
+\renewcommand{\section}{\@startsection{section}{1}{0mm}
+	{-0ex plus -.9ex minus -.5ex}
+	{0.1ex plus .2ex}%x
+	{\normalfont\small\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}
+	{-1ex plus -.5ex minus -.2ex}
+	{0.1ex plus .2ex}
+	{\normalfont\footnotesize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsection}{2}{0mm}
+	{-1ex plus -.5ex minus -.2ex}
+	{0.1ex plus .2ex}
+	{\normalfont\footnotesize\bfseries}}
 \makeatother
 
 \begin{document}
-
 \maketitle
+\begin{multicols*}{3}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
 
-\section{Test}
-\lipsum[1]
+\section{Distributions}
+\begin{tabular}{l|lll}
+	\textbf{Binary} & Bernoulli & Binomial & Beta\\
+	\textbf{Discrete} & Categorical & Multinomial & Dirichlet
+\end{tabular}
 
-\section{Test 2}
-\lipsum[5-8]
+\subsection{Bernoulli}
+$\mathrm{Ber}(x|n) = \mu^x(1-\mu)^{1-x}$, \qquad
+$\Ex[x]=\mu$, \qquad
+$\Var[x] = \mu -\mu^2$, \\
+$P(D,\mu) = \prod_{n=1}^N \mu^{x_n}(1 - \mu)^{1-x_n}$, \qquad
+$\mu_\text{ML} = \frac{1}{N} \sum_{n=1}^N x_n$
 
+\subsection{Binomial}
+$\mathrm{Bin}(m|N,\mu) = \binom{N}{m} \mu^m(1-\mu)^{N-m}$, \qquad
+$\frac{n!}{k!(n-k)!} = \binom{n}{k}$, \\
+$\Ex[m] = N\mu$, \qquad
+$\Var[m] = N\mu(1-\mu)$, \qquad
+$\mu_\text{ML} = \frac{m}{N}$
+
+\subsection{Categorical}
+$p(\vt{x}|\vt{\mu}) = \prod_{k} \mu_k^{x_k}$, \qquad
+$\vt{\mu} \in \{0,1\}^K$, \qquad
+$\sum_k \mu_k = 1$, \qquad
+$\vt{\mu}_\text{ML} = \frac{\vt{m}}{N}$, \\
+$m_k = \sum_n x_{nk}$, \qquad
+$\mathrm{Mult}(m_1 \ldots, m_k|N, \vt{\mu}) = (\frac{N!}{m_1!,\ldots,m_k} \prod_{k}) \mu_k^{mk}$
+\subsection{Beta}
+$\mathrm{Beta}(\mu|a,b) = \frac{\Gamma(a + b)}{\Gamma(a)\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1}$,
+\footnote{
+	$\Gamma(x) = \int_0^1 u^{x-1}e^{-u} = 1$, \qquad
+	$\Gamma(x+1) = \Gamma(x)x$, \qquad
+	$\Gamma(x+1) = x!$
+}\qquad
+$\Ex[\mu] = \frac{a}{a + b}$, \\
+$\Var[x] = \frac{ab}{(a+b)^2(a+b+1)}$, \qquad
+$p(\mu|m,l,a,b) \propto \mu^{m+a-1}(1-\mu)^{l+b-1}$
+
+\subsection{Gamma Distribution}
+$\mathrm{Gamma}(\tau | a,b) = \frac{b^a}{\Gamma(a)}\tau^{a-1}e^{-b\tau}$, \qquad
+$\Ex[\tau] = \frac{a}{b}$, \qquad
+$\Var[\tau] = \frac{a}{b^2}$, \\
+$\mathrm{mode}[\tau] = \frac{a-1}{b}$ for $a \ge 1$, \qquad
+$\Ex[\ln \tau] = \psi(a) - \ln b$, \\
+$H(\tau) = ln \Gamma(a) - (a-1)\psi(a) - \ln b + a$
+
+\subsection{Multinomial Distributions}
+$\mathbf{x} = \lbrace 0,0,0,0,1,0,0 \rbrace^T$,
+$\sum_{k=1}^K x_k = 1$,
+$p(x|\mu) = \prod_{k=1}^K \mu_k^{x_k}$,
+$\sum_{k=1}^K \mu_k = 1$,
+$\mu_{ML} = \frac{m}{N}$,
+$m_k = \sum_{k=1}^K x_{nk}$
+
+\subsection{Dirichlet}
+$\mathrm{Dir}(\mu|\alpha) = \frac{\Gamma(\sum_k a_k)}{\Gamma{a_1} \ldots
+\Gamma{a_k}} \prod_{k=1}^K\mu_k^{a_k-1}$
+
+\subsection{Gaussian}
+$\mathcal{N}(x|\mu,\sigma) = \frac{1}{\sqrt{2 \pi
+\sigma^2}}\exp(-\frac{1}{2\sigma^2}(x-\mu)^2)$,\\
+$\mathcal{N}(x|\mu,\Sigma) = \frac{1}{(2\pi)^{D/2}}
+\frac{1}{\sqrt{|\Sigma|}} \exp(-\frac{1}{2}(x-\mu)^T) \Sigma^{-1}
+(x-\mu))$
+
+\subsection{ML for the Gaussian}
+$\ln p(X|\mu, \Sigma) = -\frac{ND}{2}\ln(2\pi) - \frac{N}{2}\ln|\Sigma|
+- \frac{1}{2}\sum_{n=1}^N (x_n - \mu)^T \Sigma^{-1} (x_n - \mu)$,
+$\mu_{ML} = 1/N \sum_{n=1}^N x_n$,
+$\Sigma_{ML} = 1/N \sum_{n=1}^N (x_n - \mu)^T (x_n - \mu)$
+
+\subsubsection{Stochastic gradient descent Gaussian}
+$\max\ P(x_1,\cdots,x_n|\theta)$,
+$\theta^N = \theta^{N-1} + \alpha_{N-1} \frac{\partial}{\partial
+\theta^{N-1}}
+\ln\ p(x_n|\theta^{N-1})$
+
+\subsection{Marginal and Conditional Gaussians}
+Given $p(x) = \mathcal{N}(x | \mu, \Lambda^{-1})$ and $p(y|x) =
+\mathcal{N}(y | Ax + b, L^{-1})$. We get $p(y) = \mathcal{N}(y |
+A\mu + b, L^{-1} + A \Lambda^{-1} A^T)$ and $p(x|y) =
+\mathcal{N}(x | \Sigma\{ A^T L (y-b) + \Lambda \mu \}, \Sigma)$,
+where $\Sigma = (\Lambda + A^T L A)^{-1}$.
+
+\subsection{Student's T distribution}
+The heavy tail of the student-t distribution makes it more
+robust against outliers.\\
+$St(x|\mu,\lambda,\nu) =
+\frac{\Gamma(\nu/2+1/2)}{\Gamma(\nu/2)}(\frac{\lambda^{1/2}}{(\pi
+\nu)^{D/2}})
+[1+\frac{\lambda(x-\mu)^2}{\nu}]^{-\nu/2-D/2}$,\\
+$f_{x}(x) = \frac{\Gamma[(\nu + p)/2]}{\Gamma(\nu/2)
+				\nu^{p/2} \pi^{p/2}|\Sigma|^{1/2}[1 +
+				1/\nu(x-\mu)^T
+\Sigma^{-1}(x-\mu)]^{(\nu+p)/2}}$\\
+$\mathbb{E}(\mathbf{x}) =
+\frac{\Gamma(D/2+v/2)}{\Gamma(v/2)}
+\frac{|\Lambda|^{1/2}}{(\pi v)^{D/2}} \int
+[1+\frac{(x-\mu)^T \Lambda
+(x-\mu)}{v}]^{-D/2-v/2}x\mathrm{d}x   $
+
+
+\end{multicols*}
 \end{document}
 
