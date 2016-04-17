@@ -215,6 +215,29 @@ $p(x_i|x_{\text{MB}_i},x_\text{rest})=p(x_i|x_{\text{MB}_i})$ \\
 children of $x_i$ and the co-parents of the children of $x_i$.\\
 \textbf{Undirected case}: All neighboring nodes of $x_i$.
 
+\subsection{Naive Bayes}
+The problem of finding a label $y^*$ for some previously unobserved vector of
+features $\vt{x}^*$, while having previously observed $\{\vt{x}_n,y_n\}_{n=1,\ldots,N}$.
+We build a \textit{generative} GM, linking the label $y_n$ with each feature of
+the feature vector $\vt{x}_n$. This implies that all features are independent of
+each other given the label. For a single data case the joint probability is \\
+$p(y,x_1,\ldots,x_D|\vt{\eta},\vt{\theta}_i)=p(y|\vt{\eta})\prod_{i=1}^D p(x_i|\vt{\theta}_i)$ \\
+while the probability of the full dataset is
+$\prod_{n=1}^N p(y_n|\vt{\eta})\prod_{i=1}^D p(x_i|\vt{\theta}_i)$ \\
+Note that this generative form is chosen as the other option (features pointing
+towards the label) would imply a very highly parameterized model, as we would
+considering $p(y|x_1,\ldots,x_D)$. \\
+Finding a label $y^*$ implies finding \\
+$y^*=\argmax_y\left\{ \ln p(y|\vt{\eta})+\sum_{i=1}^D \ln p(x_i^*|y,\vt{\theta}_i) \right\}$
+
+\subsection{Maximum Likelihood Training in BNs}
+It is fast because the log-likelihood \textit{decomposes} into a sum over all
+variables $X_i$. Learning all parameters reduces into a collection of
+independent tasks of learning $p(x_i|\text{pa}_{x_i})$. \\
+$p(x_i|\text{pa}_{x_i})=\frac{N(x_i,\text{pa}_{x_i})}{N(\text{pa}_{x_i})}$ \\
+is the number of times $x_i$ co-occurred with $\text{pa}_{x_i}$ divided by the
+number of times $\text{pa}_{x_i}$ occurred.
+
 \subsection{Inference in Graphical Models}
 In which some of the variables are observed and we wish to compute the posterior
 distribution of one or more subsets of other variables.
