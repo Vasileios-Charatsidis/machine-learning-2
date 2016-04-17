@@ -5,7 +5,7 @@
 % v.01, November 01, 2014
 
 % Modified by Andrea Jemmett
-% v.01.03, April 13, 2016
+% v.01.04, April 17, 2016
 
 \ProvidesClass{amsmlaj}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
@@ -149,6 +149,8 @@ Proof Sketch:~~}}
 \newcommand{\Cov}{\mathop{\mathrm Cov}\displaylimits}
 \newcommand{\Var}{\mathop{\mathrm Var}\displaylimits}
 \newcommand{\eps}{\varepsilon}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
 
 
 %%%%%%%%%%%%%%%%%%% macros particular to this course
