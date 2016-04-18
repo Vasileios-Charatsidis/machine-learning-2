@@ -2,6 +2,7 @@
 \usepackage{anysize}
 \usepackage[fontsize=9pt]{scrextend}
 \usepackage{multicol}
+\usepackage{mathtools}
 
 
 \author{Andrea Jemmett}
@@ -296,18 +297,93 @@ graphs are the most general representation, and since any other tree
 representation can be easily converted to a factor tree, the sum-product
 algorithm is defined for factor trees.
 
-\subsubsection{Sum-product algorithm}
-Probability of the factor graph: $p(\vec{x}) = \frac{1}{Z}\prod_\alpha f_\alpha(\vec{x}_\alpha)$\\
-\textbf{factor $\rightarrow$ variable message}
-$\displaystyle \mu_{\alpha\rightarrow i}(x_i) =
-\sum_{x_{\alpha \smallsetminus i}}f_\alpha (\vec{x}_\alpha) \prod_{j\in \alpha \smallsetminus i}\mu_{j\rightarrow \alpha}$\\
-\textbf{variable $\rightarrow$ factor message}
-$\displaystyle \mu_{j\rightarrow \alpha}(x_j) =
-\prod_{\beta \in \mathrm{ne}(j)\smallsetminus\alpha} \mu_{\beta\rightarrow j}(x_j)$\\
+\subsubsection{Sum-Product Algorithm}
+It is used to find \textit{individual} marginals. \\
+Probability of the factor graph: $p(\vt{x}) = \frac{1}{Z}\prod_\alpha f_\alpha(\vt{x}_\alpha)$\\
+\textbf{factor $\rightarrow$ variable} message:\\
+$\displaystyle \mu_{f_\alpha\rightarrow x_i}(x_i) =
+\sum_{\vt{x}_\alpha \smallsetminus x_i} f_\alpha (\vt{x}_\alpha)
+\prod_{m \in \text{ne}(f_\alpha) \smallsetminus x_i}\mu_{x_m\rightarrow f_\alpha}(x_m)$\\
+\textbf{variable $\rightarrow$ factor} message: \\
+$\displaystyle \mu_{x_m\rightarrow f_\alpha}(x_m) =
+\prod_{\beta \in \text{ne}(x_m)\smallsetminus f_\alpha} \mu_{f_\beta\rightarrow x_m}(x_m)$\\
 \begin{tabular}{@{}llll}\\
-	\textbf{leaf node messages}& $x_l$ & is a leaf node: & $\mu_{l\rightarrow \delta}(x_l) = 1$\\
-	&$\varepsilon$ & is a leaf node: & $\mu_{\varepsilon\rightarrow k}(x_k) = f_\varepsilon(x_k)$
-\end{tabular}
+	\textbf{leaf nodes}& $x_l$ & is variable: & $\mu_{x_l \rightarrow f_\delta}(x_l) = 1$\\
+	&$f_\varepsilon$ & is factor: & $\mu_{f_\varepsilon\rightarrow x_k}(x_k) = f_\varepsilon(x_k)$
+\end{tabular} \\
+\textbf{variable marginal}:
+$\displaystyle p(x)=\prod_{\alpha \in \text{ne}(x)} \mu_{f_\alpha \rightarrow x}(x)$ \\
+\textbf{factor marginal}:
+$\displaystyle p(\vt{x}_\alpha) = f_\alpha(\vt{x}_\alpha)
+\prod_{i \in \text{ne}(f_\alpha)} \mu_{x_i \rightarrow f_\alpha}(x_i)$ \\
+By caching intermediate results and calculating two messages for each edge in
+a tree-structured factor graph, the Sum-Product algorithm efficiently computes
+all variable marginals in $O(2EK^2)$ (where $E$ is the number of edges and each
+variable is assumed to have $K$ possible values).
+
+\subsubsection{Max-Sum Algorithm}
+It is used to find a setting of the variables that has the largest
+\textit{joint} probability and the value of that probability. \\
+$\displaystyle\vt{x}^\text{max} = \argmax_{\vt{x}} \prod_\alpha f_\alpha(\vt{x}_\alpha)\qquad
+p(\vt{x}^\text{max}) = \max_{\vt{x}} \frac{1}{Z} \prod_\alpha f_\alpha(\vt{x}_\alpha)\\
+\log p(\vt{x}^\text{max}) = \max_{\vt{x}}\left\{\log Z + \sum_\alpha f_\alpha(\vt{x}_\alpha)\right\}\\$
+\textbf{factor $\rightarrow$ variable} message:\\
+$\displaystyle \mu_{f_\alpha \rightarrow x_i}(x_i) = \max_{\vt{x}_\alpha
+\setminus x_i} \left[ (\ln f_\alpha(\vt{x}_\alpha)) +
+\sum_{m \in \text{ne}(f_\alpha) \setminus x_i} \mu_{x_m \rightarrow f_\alpha}(x_m) \right] $\\
+\textbf{variable $\rightarrow$ factor} message:\\
+$\displaystyle \mu_{x_m \rightarrow f_\alpha}(x_m) =
+\sum_{f_\beta \in \mathrm{ne}(x_m) \setminus f_\alpha} \mu_{f_\beta \rightarrow x_m}(x_m) \\$
+\begin{tabular}{@{}llll}\\
+	\textbf{leaf nodes} & $x_l$ & is variable: & $\mu_{x_l \rightarrow f_\delta} = 0$ \\
+	& $f_\varepsilon$ & is factor: & $\mu_{f_\varepsilon \rightarrow x_k} = \ln f_\varepsilon(x_k)$
+\end{tabular} \\
+\begin{tabular}{@{}ll}
+	\textbf{at root} & $p^\text{max}=
+		\max_x \left[ \sum_{f_\alpha \in \text{ne}(x)}\mu_{f_\alpha \rightarrow x}(x) \right]$
+	\\
+	&$x^\text{max}=
+		\argmax_x \left[ \sum_{f_\alpha \in \text{ne}(x)}\mu_{f_\alpha \rightarrow x}(x) \right]$ \\
+	\textbf{max-marginals} & $q(x_i)=
+	-\ln Z + \sum_{f_\alpha \in \text{ne}(x_i)} \mu_{f_\alpha \rightarrow x_i}(x_i)$
+\end{tabular} \\
+Given max-marginals you have to perform a decoding step (the Viterbi algorithm)
+in order to find the global optimum. If $q(x_i)$ has unique maximum, we can use
+$x_i^* = \argmax_{x_i} q(x_i)$.
+
+\subsubsection{Variable Elimination}
+If we have some clusters $C_i$ and $C_j$, then:\\
+$ S_{ij} = C_i \cap C_j $
+Define potential functions $\Psi_i$ for each cluster $C_i$:
+$ \forall C_i: \Psi_i \coloneqq \prod_{\psi_j \in C_i} \psi_j$
+$ m_i \rightarrow C_j = \sum_{C_i \smallsetminus  S_{ij}}
+\Psi_i\prod_{k \in \mathrm{ne}(i) \smallsetminus j} m_{k \rightarrow i}(C_i)$\\
+Note that: $ C_i \setminus S_{ij} = C_i \setminus C_j $\\
+Belief: $ \Psi_{\text{root}} \prod_{k \in \mathrm{ne}(\text{root})} m_{k
+\rightarrow \text{root}}(C_{\text{root}}) \propto
+p(C_{\text{root}})$\\
+Clusters replace factors, edges replace variables.\\
+\textbf{Tree width} The width of a tree is one smaller than the
+biggest clique in the optimal ordering. Finding the optimal
+order is NP-hard.\\
+\textbf{Running Intersection Property} A clique tree has the
+running intersection property if $x \in C_i \land x \in C_j \Rightarrow x \in C_k$
+on the clique path between $C_i$ and $C_j$.
+
+\subsubsection{Loopy Belief Propagation}
+Is a way to approximate inference in graphs with loops. The idea is simply to
+apply the sum-product algorithm even though there is no guarantee that it will
+yield good results. This approach is possible because the message passing rules
+are purely local. However, because of the loops, information can flow many times
+around the graph; for some models it will converge, for others it will not. We
+will say that a node $a$ has a \textbf{pending} message on its link to a node
+$b$ if node $a$ has received any message on any of its other links since the
+last time it sent a message to $b$. Thus, when a node receives a message on one
+of its links, this creates pending messages on all of its other links. Then we
+need to send only pending messages otherwise they will be duplicate. When there
+are no more pending messages, the product of the received messages at every node
+gives the (exact for tree) marginal. For loopy graphs however the algorithm may
+not converge and when we stop the marginals are \textit{approximate}.
 
 
 \end{multicols*}
