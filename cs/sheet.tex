@@ -164,6 +164,40 @@ $\mathbb{E}(\mathbf{x}) =
 [1+\frac{(x-\mu)^T \Lambda
 (x-\mu)}{v}]^{-D/2-v/2}x\mathrm{d}x   $
 
+\section{Generative Models for Discrete Data}
+We can classify a feature vector $\vt{x}$ using the Bayes rule \\
+$p(y=c|\vt{x},\vt{\theta})\propto p(\vt{x}|y=c,\vt{\theta})p(y=c|\vt{\theta})$ \\
+We can use different models for the data when it's discrete, based on what kind
+of distribution we expect the data to assume and a respective \textit{conjugate}
+prior over the model parameters $\vt{\theta}$.
+
+\subsection{Beta-Binomial Model}
+In this model we can observe a series of Bernoulli trials (e.g. coin tosses) or
+the number of heads (and the number of tails or total number of tosses), which
+is a Binomial, and it would result in the same \textbf{likelihood}:
+$p(\mathcal{D}|\theta)=\theta^{N_1}(1-\theta)^{N_0}$. A conjugate \textbf{prior} for this
+likelihood is given by $\text{Beta}(\theta|a,b)\propto\theta^{a-1}(1-\theta)^{b-1}$.
+The \textbf{posterior} is then obtained by multiplying the prior with the likelihood,
+$p(\theta|\mathcal{D})\propto p(\mathcal{D}|\theta)p(\theta) =
+\text{Bin}(N_1|\theta,N_1+N_0)\text{Beta}(\theta|a,b)\propto\text{Beta}(\theta|a+N_1,b+N_0)$.
+The \textbf{evidence} is obtained from
+$p(\theta|\mathcal{D})=\frac{1}{p(\mathcal{D})}p(\mathcal{D}|\theta)p(\theta)$
+normalization of posterior is $1/B(a+N_1,b+N_0)$\footnote{
+				$B(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$
+}, of prior is $1/B(a,b)$, hence
+$p(\mathcal{D})=\binom{N}{N_1}B(a+N_1,b+N_0)/B(a,b)$.
+
+\subsection{Dirichlet-Multinomial Model}
+For example $N$ dice rolls or \textit{multinomial} events (with $K$ outcomes).
+The \textbf{likelihood} is
+$p(\mathcal{D}|\vt{\theta})=\prod_{k=1}^K\theta_k^{N_k}$ where $N_k$ counts
+times event $k$ occurred (it's a suff. statistic). A conjugate \textbf{prior} is
+the Dirichlet distribution. The \textbf{posterior} is
+$p(\vt{\theta}|\mathcal{D})\propto\text{Dir}(\vt{\theta}|\vt{\alpha})p(\mathcal{D}|\vt{\theta})
+\propto\text{Dir}(\vt{\theta}|\alpha_1+N_1,\ldots,\alpha_k+N_k)$. The
+\textbf{evidence} is (obtained as the previous model)
+$p(\mathcal{D})=B(\vt{N}+\vt{\alpha})/B(\vt{\alpha})$.
+
 \section{Graphical Models}
 Capture noise, for reasoning, enormous datasets, for causality, for designing
 models, CIR are encoded in the graph, for inference.
