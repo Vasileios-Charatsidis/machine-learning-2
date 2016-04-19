@@ -56,13 +56,22 @@
 \subsection{Independence}
 $p(X,Y)=p(X)p(Y) \Leftrightarrow p(X|Y)=p(X) \Leftrightarrow p(Y|X)=p(Y)$
 \subsection{Conditional Independence}
-$X \ci Y \mid Z \Longleftrightarrow p(X,Y|Z)=p(X|Z)p(Y|Z)$
+$X \ci Y \mid Z \Longleftrightarrow p(X,Y|Z)=p(X|Z)p(Y|Z)$ \\
+$p(X,Y|Z)=p(X|Y,Z)p(Y|Z)=p(X|Z)p(Y|Z)$
 \subsection{Sum and Product Rules}
 $p(X,Y)=p(X)p(Y|X)$, \qquad $p(X,Y,Z)=p(X)p(Y|X)p(Z|X,Y)$ \\
 $p(X)=\sum_Y p(X,Y)$
 \subsection{Bayes' Theorem}
 $p(Y|X)=\frac{p(X|Y)p(Y)}{p(X)}$, \qquad
 $p(Y|X,Z)=\frac{p(X|Y,Z)p(Y|Z)}{p(X|Z)}$
+
+\subsection{Chain Rule}
+$p(x_a,x_b,x_c) = p(x_c|x_a,x_b)p(x_b|x_a)p(x_a)$ \qquad
+$p(\vt{x}) = \prod_{k=1}^K p(x_k|{\mathrm{pa}_k})$
+
+\subsection{Misc}
+$p(a,b|c) = \frac{p(a,b,c)}{p(c)}$ \qquad
+$p(a,b,c) = p(a|c)p(b|c)p(c)$
 
 \section{Distributions}
 \begin{tabular}{l|lll}
@@ -165,6 +174,47 @@ $\mathbb{E}(\mathbf{x}) =
 [1+\frac{(x-\mu)^T \Lambda
 (x-\mu)}{v}]^{-D/2-v/2}x\mathrm{d}x   $
 
+\section{Independent Component Analysis}
+We have a set of N observations:\\
+$D = \lbrace \mathbf{x}^{(n)} \in \mathbb{R}^J \rbrace ^{N}_{n=1}$\\
+, with $I$ independent sources. Thus:\\
+$\mathbf{x} = \mathbf{G}\mathbf{s}$, where $G$ is not known. We assume that the
+latent variables are independently distributed, with marginal distributions
+$P(s_i|H) = p_i(s_i)$. The probability of the observables and the hidden nodes
+is:\\
+$P(\lbrace x^{(n)},s^{(n)} \rbrace_{n=1}^{N}|G,H) =
+\prod_{n=1}^N[P(x^{(n)}|s^{(n)},G,H)P(s^{(n)}|H)]$\\
+$= \prod_{n=1}^N[(\prod_J \delta(x_j^{(n)} - \sum_i G_{ji}s_i^{(n)}))(\prod_i
+p_i(s_i^{(n)}))]$.\\ The factor x is generated without noise. For learning the G
+from the data the likelihood is: $P(D|G,H) = \prod_n P(x^{(n)}|G,H)$\\
+, which is a product of factors if we marginalize over the latent variables. We
+can express each coefficient of $\mathbf{G}$, as a summation over all
+coefficients multiplied by a delta function such that, $G_{ji}s_i^{(n)} = \sum_i
+G_{ji}s_i^{(n)}$. ($\mathcal{H}$ denotes the model.)\\
+$
+p(\mathbf{x^{(n)}} | \mathbf{G}, \mathcal{H}) = \int p(\mathbf{x^{(n)}} |
+\mathbf{s}^{(n)}, \mathbf{G}, \mathcal{H}) p(\mathbf{s}^{(n)}| \mathcal{H})
+\mathrm{d}^I\mathbf{s}^{(n)}\\
+= \int \prod_j \delta (x_j^{(n)} - G_{ji}s_i^{(n)}) \prod_i
+p_i(s_i^{(n)})\mathrm{d}^I\mathbf{s}^{(n)}\\
+= \frac{1}{|\det\ \mathbf{G}|} \prod_i p_i(G_{ji}^{-1}x_j) \Rightarrow \\
+\ln p(\mathbf{x^{(n)}} | \mathbf{G}, H) = -\ln |\det \mathbf{G}| + \sum_i \ln
+p_i(G_{ji}^{-1}x_j)
+$\\
+, which is the log-likelihood of the data D. Now, to find the gradient of the
+log-likelihood, we are introducing $\mathbf{W} = \mathbf{G}^{-1}$, now the
+log-likelihood can be written as:\\
+$
+\ln p(\mathbf{x^{(n)}} | \mathbf{G}, H) = -\ln |\det\mathbf{W}| + \sum_i \ln
+p_i(W_{ji}x_j)
+$\\
+The gradient of the log-likelihood equation will be:\\
+$
+\frac{\partial}{\partial W_{ij}}\ln p(\mathbf{x^{(n)}} | \mathbf{G},
+\mathcal{H}) = -\frac{\partial}{\partial W_{ij}}(\ln|\det \mathbf{W}|) +
+\frac{\partial}{\partial W_{ij}}(\sum_i \ln p_i(W_{ji}x_j))
+$
+
 \section{Generative Models for Discrete Data}
 We can classify a feature vector $\vt{x}$ using the Bayes rule \\
 $p(y=c|\vt{x},\vt{\theta})\propto p(\vt{x}|y=c,\vt{\theta})p(y=c|\vt{\theta})$ \\
@@ -202,6 +252,14 @@ $p(\mathcal{D})=B(\vt{N}+\vt{\alpha})/B(\vt{\alpha})$.
 \section{Graphical Models}
 Capture noise, for reasoning, enormous datasets, for causality, for designing
 models, CIR are encoded in the graph, for inference.
+
+\subsection{Discriminative}
+$p(\vt{t}|w) = p(w) \prod_{n=1}^N p(t_n|w)$
+
+\subsection{Generative}
+$T^* = P(T^*|W,X^*,X_i,T_i,\sigma^2,a)=$,
+$[\prod_{i=1}^N P(X_i|W,\sigma^2)]$
+$P(W|a)P(T^*|X^*,W,\sigma^2)$
 
 \subsection{Directed GMs a.k.a. Bayesian Networks}
 Nodes are connected by \textit{directed} arrows. The full joint distribution is\\
@@ -272,6 +330,16 @@ independent tasks of learning $p(x_i|\text{pa}_{x_i})$. \\
 $p(x_i|\text{pa}_{x_i})=\frac{N(x_i,\text{pa}_{x_i})}{N(\text{pa}_{x_i})}$ \\
 is the number of times $x_i$ co-occurred with $\text{pa}_{x_i}$ divided by the
 number of times $\text{pa}_{x_i}$ occurred.
+
+The probability of a set of variables $\mathbf{x}$ in a Bayes Net is defined as
+$p(x) = \prod_i p(x_i|x_{pa_i})$. If we define a function $\theta(x_i,
+x_{pa_i})$ and use it instead of $p(x_i |x_{pa_i})$, we have $p(x) = \prod_i
+\theta(x_i, x_{pa_i})$, if we constrain $\theta$ such that $\sum_{x_i}
+\theta(x_i , x_{pa_i}) = 1, \forall i$.
+We now have that the probability of the full data set:
+$p(\{\widetilde x_{in}\}) = \prod_n \prod_i \prod_{x_i}
+\prod_{x_{pa_{i}}} \theta(x_i, x_{pa_i})
+^{\mathbb{I}[x_i = ̃\widetilde x_{in} \land x_{pa_i} = ̃\widetilde x_{pa_in}]}$
 
 \subsection{Inference in Graphical Models}
 In which some of the variables are observed and we wish to compute the posterior
