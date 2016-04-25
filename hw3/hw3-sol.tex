@@ -176,6 +176,40 @@ $x_3$ designed as the root. Using the computed messages given in \emph{p.409 Bis
 \end{center}
 \end{figure}
 
+\begin{sol}
+	\begin{enumerate}
+		\item
+			\begin{align}
+				p(x_1)
+				&=\mu_{f_a \to x_1}(x_1) \\
+				&=\sum_{x_2} f_a(x_1,x_2) \mu_{x_2 \to f_a}(x_2) \\
+				&=\sum_{x_2} f_a(x_1,x_2) \mu_{f_b \to x_2}(x_2) \mu_{f_c \to x_2}(x_2) \\
+				&=\sum_{x_2} f_a(x_1,x_2) \sum_{x_3}f_b(x_2,x_3) \sum_{x_4}f_c(x_2,x_4) \\
+				&=\sum_{x_2,x_3,x_4}f_a(x_1,x_2)f_b(x_2,x_3)f_c(x_2,x_4) \\
+				&=\sum_{x_2,x_3,x_4}p(x_1,x_2,x_3,x_4)
+			\end{align}
+			\begin{align}
+				p(x_3)
+				&=\mu_{f_b \to x_3}(x_3) \\
+				&=\sum_{x_2}f_b(x_2,x_3) \mu_{x_2 \to f_b}(x_2) \\
+				&=\sum_{x_2}f_b(x_2,x_3) \mu_{f_a \to x_2}(x_2) \mu_{f_c \to x_2}(x_2) \\
+				&=\sum_{x_2}f_b(x_2,x_3) \sum_{x_1}f_a(x_1,x_2) \sum_{x_4}f_c(x_2,x_4) \\
+				&=\sum_{x_1, x_2, x_4} f_b(x_2,x_3) f_a(x_1,x_2) f_c(x_2,x_4) \\
+				&=\sum_{x_1,x_2,x_4} p(x_1,x_2,x_3,x_4)
+			\end{align}
+		\item
+			\begin{align}
+				p(x_1,x_2)
+				&=f_a(x_1,x_2) \mu_{x_1 \to f_a}(x_1) \mu_{x_2 \to f_a}(x_2) \\
+				&=f_a(x_1,x_2) \mu_{f_b \to x_2}(x_2) \mu_{f_c \to x_2}(x_2) \\
+				&=f_a(x_1,x_2) \sum_{x_3} f_b(x_2,x_3) \sum_{x_4} f_c(x_2,x_4) \\
+				&=f_a(x_1,x_2) \sum_{x_3,x_4} f_b(x_2,x_3) f_c(x_2,x_4) \\
+				&=\sum_{x_3,x_4} f_a(x_1,x_2) f_b(x_2,x_3) f_c(x_2,x_4) \\
+				&=\sum_{x_3,x_4} p(x_1,x_2,x_3,x_4)
+			\end{align}
+	\end{enumerate}
+\end{sol}
+
 \end{problem}
 
 \begin{problem}
