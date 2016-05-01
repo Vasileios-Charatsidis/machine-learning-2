@@ -5,7 +5,7 @@
 % v.01, November 01, 2014
 
 % Modified by Andrea Jemmett
-% v.01.04, April 17, 2016
+% v.01.05, May 01, 2016
 
 \ProvidesClass{amsmlaj}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
@@ -40,10 +40,11 @@
 \usepackage[table]{xcolor}
 
 \usepackage{tikz}
-\usetikzlibrary{fit,positioning}
+\usetikzlibrary{fit}
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
 \usetikzlibrary{snakes}
+\usetikzlibrary{bayesnet}
 \tikzstyle{nObs}=[circle,draw=black, inner sep=0pt,minimum size=6mm]
 \tikzstyle{obs}=[circle,draw=black, fill=black!10,text=black, inner sep=0pt,minimum size=6mm]
 \tikzstyle{fact}=[rectangle, draw =none, fill=red, thick, minimum width=3mm,minimum height=3mm]
@@ -68,6 +69,7 @@
 \newcommand{\cclass}[1]{\mathbf{#1}}
 
 \renewcommand{\P}{\cclass{P}}
+\newcommand{\pder}[2][]{\frac{\partial#1}{\partial#2}}
 
 
 \newtheorem{theorem}{Theorem}
