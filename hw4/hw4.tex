@@ -1,0 +1,96 @@
+\documentclass{amsmlaj}
+\begin{document}
+\lecture{Homework 4}{Ke Tran}{m.k.tran@uva.nl}{May 03, 2016}
+\noindent {\footnotesize You are allowed to  discuss with your colleagues but you should write the answers in \emph{your own words}. If you discuss with others, write down the name of your collaborators on top of the first page. No points will be deducted for collaborations. If we find similarities in solutions beyond the listed collaborations we will consider it as cheating.}
+
+\noindent {\footnotesize We will not accept any late submissions under any circumstances. The solutions to the previous homework will be handed out in the class at the beginning of the next homework session. After this point, late submissions will be automatically graded zero.}
+%\make title
+
+\begin{problem}
+Consider a Gaussian mixture model
+$$
+p(\vt{x}) = \sum_{k=1}^K  \pi_k \distNorm(\vt{x}|\vt{\mu}_k,\vt{\Sigma}_k)
+$$
+\begin{enumerate}
+\item Given the expected value of the complete-data log-likelihood (9.40 in Bishop's book)
+$$
+\Ex_{\text{posterior}}[\ln p(\vt{X},\vt{Z}|\vt{\mu}, \vt{\Sigma},\vt{\pi})] = \sum_{n=1}^N\sum_{k=1}^K \gamma(z_{nk}) \left\{ \ln\pi_k + \ln\distNorm(\vt{x}_n|\vt{\mu}_k,\vt{\Sigma}_k)\right\} \label{eq:ex_post}
+$$
+Derive update rules for $\vt{\pi}$, $\vt{\mu}$ and $\vt{\Sigma}$. 
+
+\item Consider a special case of the model above, in which the covariance matrices $\vt{\Sigma}_k$ of the components are all constrained to have a common value $\vt{\Sigma}$. Derive EM equations for maximizing the likelihood function under such a model.
+\end{enumerate}
+
+\end{problem}
+
+\begin{problem}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  % Define nodes
+  \node[obs]                               (x) {$\vt{x}$};
+  \node[latent, above=1cm of x] (z) {$\vt{z}$};
+ 
+  \node[const, right=1cm of z]            (t) {$\vt{\theta}$};
+
+  % Connect the nodes
+  \edge {z,t} {x} ; %
+  \edge {t}{z} ;
+
+  % Plates
+  \plate[inner sep=0.5cm] {xz} {(x)(z)} {$N$} ;
+\end{tikzpicture}
+\caption{A simple generative model.}
+\label{fig:gm}
+\end{figure}
+Suppose we wish to use the EM algorithm to maximize the posterior distribution $p(\vt{\theta}|\vt{X})$ for a model (Figure \ref{fig:gm}) containing latent variables $\vt{z}$ and observed variables $\vt{x}$. Show that the E step remains the same as in the maximum likelihood case, where as in the M step, the quantity to be maximized is
+$$
+\sum_{\vt{z}} p(\vt{Z}|\vt{X},\vt{\theta}^{\text{old}})\ln p(\vt{X},\vt{Z}|\vt{\theta}) + \ln p(\vt{\theta})
+$$
+\end{problem}
+
+\begin{problem}
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\node[obs]                   (x)      {$\vt{x}_n$} ;
+\node[latent, above=of x] (z) {$\vt{z_n}$};
+\node[latent, above=of z] (pi) {$\vt{\pi}$};
+\node[const, right=of pi] (alpha) {$\vt{\alpha}$};
+\node[latent, left=of z] (mu) {$\vt{\mu}_k$};
+\node[const, left=0.5cm of mu] (ab) {$a,b$};
+\node[const, right=0.5cm of x] (N) {$N$};
+\plate {plate_mu} { (mu) } {$K$};
+\plate {plate_z} { (z)(x)(N) } {};
+\edge[->]{ab}{mu};
+\edge[->]{mu}{x};
+\edge[->]{z}{x};
+\edge[->]{pi}{z};
+\edge[->]{alpha}{pi};
+\end{tikzpicture}
+\caption{Mixtures of Bernoulli distribution}
+\label{fig:mixbern}
+\end{center}
+\end{figure}
+\begin{eqnarray}
+\vt{\pi}|\vt{\alpha} & \sim & \text{Dir}(\vt{\pi}|\vt{\alpha}) \nonumber\\
+\vt{z}_n | \vt{\pi} & \sim & \text{Mult}(\vt{z}_n | \vt{\pi}) \nonumber\\
+\vt{\mu}_k|a_k, b_k & \sim & \text{Beta}(\vt{\mu}_k|a_k, b_k) \nonumber\\
+\vt{x}_n|\vt{z}_n, \vt{\mu}=\{\vt{\mu}_1, \dotsc, \vt{\mu}_K\} & \sim & \prod\limits_{k=1}^K\left(\text{Bern}(\vt{x}_n|\vt{\mu}_k)\right)^{z_{nk}} \nonumber
+\end{eqnarray}
+Derive the EM algorithm for maximizing the posterior probability $p(\vt{\mu},\vt{\pi}|\{ \vt{x}_n\}_{n=1}^N)$. (The E step is given in Bishop's Book, you only need to do the M step)
+
+\end{problem}
+
+\begin{problem}\textsf{Bishop 10.38}
+Verify the results of the calculation of mean, variance of $q^{\backslash n}(\vt{\theta})$ and normalizing constant $Z_n$ for the expectation propagation algorithm applied to the cluster problem
+\begin{eqnarray}
+\vt{m}^{\backslash n} & = & \vt{m} + v^{\backslash n}v_n^{-1}(\vt{m}-\vt{m}_n)\\
+(v^{\backslash n})^{-1} & = & v^{-1} - v_n^{-1}\\
+Z_n & = & (1-w)\distNorm\left(\vt{x}_n|\vt{m}^{\backslash n}, (v^{\backslash n}+1)\vt{I}\right) + w\distNorm\left(\vt{x}_n|\vt{0},a\vt{I}\right)
+\end{eqnarray}
+
+Hint: see 10.38 in the book for more hint. You need equation (2.115) in Bishop to solve this homework.
+\end{problem}
+
+\end{document}
