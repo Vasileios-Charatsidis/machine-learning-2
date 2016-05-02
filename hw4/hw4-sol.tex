@@ -111,15 +111,10 @@ Derive the EM algorithm for maximizing the posterior probability $p(\vt{\mu},\vt
 		\frac{\partial}{\partial\mu_{ki}}\Ex_{\vt{Z}}[\ln p(\vt{X},\vt{Z},\vt{\mu},\vt{\pi})]
 		&=\frac{a_k-1}{\mu_{ki}}-\frac{b_k-1}{1-\mu_{ki}}
 		+\sum_{n=1}^N\sum_{k=1}^K \left\{
-			\left[ \frac{\partial}{\partial\mu_{ki}}\gamma(z_{nk}) \right]
-			\right. \nonumber \\ &\left.
-			\left[
-				\ln\pi_k
-				+\sum_{i=1}^Dx_{ni}\ln\mu_{ki}
-				+\sum_{i=1}^D(1-x_{ni})\ln(1-\mu_{ki})
-			\right]
+			\gamma(z_{nk})
 			\right. \nonumber \\ & \left.
-			+ \gamma(z_{nk}) \frac{\partial}{\partial\mu_{ki}} \left[
+			\times \frac{\partial}{\partial\mu_{ki}}
+			\left[
 				\ln\pi_k
 				+\sum_{i=1}^Dx_{ni}\ln\mu_{ki}
 				+\sum_{i=1}^D(1-x_{ni})\ln(1-\mu_{ki})
@@ -147,7 +142,7 @@ Derive the EM algorithm for maximizing the posterior probability $p(\vt{\mu},\vt
 			+\mu_{ki} \sum_{n=1}^N \gamma(z_{nk})x_{ni}
 		\right]
 	\end{align}
-	and by setting this derivative and solving for $\mu_{ki}$
+	and by setting this derivative to zero and solving for $\mu_{ki}$
 	\begin{align}
 			0&=a_k - 1 - \mu_{ki}a_k + \mu_{ki} - \mu_{ki}b_k + \mu_{ki}
 				+ \sum_{n=1}^N \gamma(z_{nk})x_{ni}
@@ -163,6 +158,31 @@ Derive the EM algorithm for maximizing the posterior probability $p(\vt{\mu},\vt
 	\begin{align}
 		\vt{\mu}_k&=
 		\frac{\sum_{n=1}^N\gamma(z_{nk})\vt{x}_n+a_k-1}{\sum_{n=1}^N\gamma(z_{nk})+a_k+b_k-2}
+	\end{align}
+
+	Next we need to maximize the expectation of the log-likelihood w.r.t. $\pi_k$
+	using Lagrange multipliers to enforce the constraint $\sum_{k=1}^K\pi_k=1$
+	\begin{align}
+		\frac{\partial}{\partial\pi_k}\Ex_{\vt{Z}}[\ln p(\vt{X},\vt{Z},\vt{\mu},\vt{\pi})]
+		&=\frac{\alpha_k-1}{\pi_k} + \frac{\sum_{n=1}^N \gamma(z_{nk})}{\pi_k} + \lambda \\
+		&=\frac{\alpha_k-1+\sum_{n=1}^N \gamma(z_{nk})+\lambda\pi_k}{\pi_k}
+	\end{align}
+	and by setting this derivative to zero and solving for $\pi_k$
+	\begin{align}
+		0&=\alpha_k-1+\sum_{n=1}^N \gamma(z_{nk})+\lambda\pi_k \\
+		\pi_k &= \frac{1-\alpha_k-\sum_{n=1}^N \gamma(z_{nk})}{\lambda}
+	\end{align}
+	Using the constraint on $\vt{\pi}$ we can find the value of $\lambda$
+	\begin{align}
+		\sum_{k=1}^K \pi_k &= 1 \\
+		\frac{1}{\lambda} \sum_{k=1}^K \left[ 1-\alpha_k-\sum_{n=1}^N \gamma(z_{nk}) \right]
+		&=1 \\
+		\lambda&=K-\sum_{k=1}^K\alpha_k-\sum_{k=1}^K\sum_{n=1}^N \gamma(z_{nk}) \\
+		\lambda&=K-\sum_{k=1}^K \alpha_k - N
+	\end{align}
+	substituting back we get
+	\begin{align}
+		\pi_k&=\frac{1-\alpha_k-\sum_{n=1}^N \gamma(z_{nk})}{K-\sum_{k=1}^K\alpha_k -N}
 	\end{align}
 \end{sol}
 
