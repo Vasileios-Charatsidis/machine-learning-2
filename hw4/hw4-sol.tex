@@ -235,6 +235,33 @@ Hint: see 10.38 in the book for more hint. You need equation (2.115) in Bishop t
 		\vt{m}^{\setminus n}
 		&=(v^{-1}\vt{m}-v_n^{-1}\vt{m}_n) v^{\setminus n}
 	\end{align}
+
+	To evaluate $Z_n$ we can use eq. 10.206 in Bishop
+	\begin{align}
+		Z_n&=\int q^{\setminus n}(\vt{\theta}) f_n(\vt{\theta}) \mathrm{d}\vt{\theta} \\
+		&=\int \distNorm(\vt{\theta}|\vt{m}^{\setminus n},v^{\setminus n}\vt{I})
+		\Big[
+			(1-w)\distNorm(\vt{x}_n|\vt{\theta},\vt{I})
+			+w\distNorm(\vt{x}_n|\vt{0},a\vt{I})
+		\Big] \mathrm{d}\vt{\theta}
+	\end{align}
+	We note that $q^{\setminus n}(\vt{\theta})$ is a Gaussian distribution over
+	$\vt{\theta}$ and $f_n(\vt{\theta})$ is a Gaussian distribution over
+	$\vt{x}_n$ conditioned on $\vt{\theta}$. We can then interpret $Z_n$ in the
+	following way
+	\begin{align}
+		Z_n&=\int p(\vt{\theta})p(\vt{x}_n|\vt{\theta}) \mathrm{d}\vt{\theta} \\
+		&=\int p(\vt{\theta},\vt{x}_n) \mathrm{d}\vt{\theta} \\
+		&= p(\vt{x}_n)
+	\end{align}
+	so that we can apply the result 2.115 in Bishop to obtain
+	\begin{align}
+		Z_n&=p(\vt{x}_n) \\
+		&=(1-w)\distNorm\left(\vt{x}_n|\vt{m}^{\setminus n},\vt{I}+v^{\setminus n}\vt{I}\right)
+		+w\distNorm(\vt{x}_n|\vt{0},a\vt{I}) \\
+		&=(1-w)\distNorm\left(\vt{x}_n|\vt{m}^{\setminus n},(1+v^{\setminus n})\vt{I}\right)
+		+w\distNorm(\vt{x}_n|\vt{0},a\vt{I})
+	\end{align}
 \end{sol}
 
 \end{extraproblem}
