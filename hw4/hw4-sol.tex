@@ -188,7 +188,7 @@ Derive the EM algorithm for maximizing the posterior probability $p(\vt{\mu},\vt
 
 \end{problem}
 
-\begin{problem}\textsf{Bishop 10.38}
+\begin{extraproblem}\textsf{Bishop 10.38}
 Verify the results of the calculation of mean, variance of $q^{\backslash n}(\vt{\theta})$ and normalizing constant $Z_n$ for the expectation propagation algorithm applied to the cluster problem
 \begin{eqnarray}
 \vt{m}^{\backslash n} & = & \vt{m} + v^{\backslash n}v_n^{-1}(\vt{m}-\vt{m}_n)\\
@@ -197,6 +197,46 @@ Z_n & = & (1-w)\distNorm\left(\vt{x}_n|\vt{m}^{\backslash n}, (v^{\backslash n}+
 \end{eqnarray}
 
 Hint: see 10.38 in the book for more hint. You need equation (2.115) in Bishop to solve this homework.
-\end{problem}
+
+\begin{sol}
+	The first step is to use the division formula (eq. 10.205 in Bishop) to derive
+	$q^{\setminus n}(\vt{\theta})$
+	\begin{align}
+		q^{\setminus n}(\vt{\theta})
+		&=\frac{q(\vt{\theta})}{\widetilde{f}_n(\vt{\theta})} \\
+		&=\frac{\distNorm(\vt{\theta}|\vt{m},v\vt{I})}{s_n\distNorm(\vt{\theta}|\vt{m}_n,v_n\vt{I})} \\
+		&\propto \exp \left\{
+			\frac{1}{2v_n}(\vt{\theta}-\vt{m}_n)^\trans(\vt{\theta}-\vt{m}_n)
+			-\frac{1}{2v}(\vt{\theta}-\vt{m})^\trans(\vt{\theta}-\vt{m})
+		\right\} \\
+		&= \exp \left\{
+			\frac{1}{2v_n}(\vt{\theta}^\trans\vt{\theta}-2\vt{\theta}^\trans\vt{m}_n+\vt{m}_n^\trans\vt{m}_n)
+			-\frac{1}{2v}(\vt{\theta}^\trans\vt{\theta}-2\vt{\theta}^\trans\vt{m}+\vt{m}^\trans\vt{m})
+		\right\} \\
+		&= \exp \left\{
+			\frac{1}{2}\left(\frac{1}{v_n}-\frac{1}{v}\right)\vt{\theta}^\trans\vt{\theta}
+			-\vt{\theta}^\trans\left( \frac{\vt{m}_n}{v_n}-\frac{\vt{m}}{v} \right)
+			+\frac{1}{2v_n}\vt{m}_n^\trans\vt{m}_n
+			-\frac{1}{2v}\vt{m}^\trans\vt{m}
+		\right\} \\
+		&= \exp \left\{
+			-\frac{1}{2}(v^{-1}-v_n^{-1})\vt{\theta}^\trans\vt{\theta}
+			+\vt{\theta}^\trans(v^{-1}\vt{m}-v^{-1}\vt{m}_n)
+			+ \text{const}
+		\right\} \\
+		&\propto \distNorm(\vt{\theta}|\vt{m}^{\setminus n},v^{\setminus n}\vt{I})
+	\end{align}
+	which is a Gaussian distribution with mean and variance given by
+	\begin{align}
+		(v^{\setminus n})^{-1}&=v^{-1}-v_n^{-1} \\
+		&\nonumber\\
+		(v^{\setminus n})^{-1}\vt{m}^{\setminus n}
+		&=v^{-1}\vt{m}-v_n^{-1}\vt{m}_n \\
+		\vt{m}^{\setminus n}
+		&=(v^{-1}\vt{m}-v_n^{-1}\vt{m}_n) v^{\setminus n}
+	\end{align}
+\end{sol}
+
+\end{extraproblem}
 
 \end{document}
