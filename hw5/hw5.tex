@@ -1,0 +1,156 @@
+\documentclass{amsmlaj}
+\begin{document}
+\lecture{Homework 5}{Ke Tran}{m.k.tran@uva.nl}{12 May, 2016}
+\noindent {\footnotesize You are allowed to  discuss with your colleagues but you should write the answers in \emph{your own words}. If you discuss with others, write down the name of your collaborators on top of the first page. No points will be deducted for collaborations. If we find similarities in solutions beyond the listed collaborations we will consider it as cheating.}
+
+\noindent {\footnotesize We will not accept any late submissions under any circumstances. The solutions to the previous homework will be handed out in the class at the beginning of the next homework session. After this point, late submissions will be automatically graded zero.}
+
+%\make title
+%\noindent \textsf{Note: $\star$ denotes exercises that will be graded. $\star \star$ denotes extra (and more challenging) exercises  that will not be graded, you can do those exercises for your own good.}
+
+\begin{problem}
+In this question we are interested in generating samples from a probability density $p(x)$ with $x\in\mathbb{R}^d$. We are given an approximation $q(x)$ of $p(x)$. We will denote unnormalized densities as $\tilde{p}$ and $\tilde{q}$. 
+\begin{itemize}
+\item[a)] Assume that you have a constant $c$ such that $\tilde{q}(x)=c q(x)$ and $\tilde{q}(x)\geq p(x), \forall x$. Describe with pseudocode the ``Rejection Sampler'' algorithm.  
+\item[b)] Are the samples you generate independent from each other?
+\item[c)] An ``Importance Sampler'' accepts all samples but weights them using weights $w_n$. Provide the expression for $w_n$ in terms of $p(x_n)$ and $q(x_n)$.
+%Show how to use a Cauchy proposal to perform rejection sampling from a Gamma distribution
+\item[d)]  An ``Independence Sampler'' uses a proposal distribution of the form $q(x_{t+1}|x_t) = q(x_{t+1})$ (i.e. the proposed new state is independent of the previous state) and subsequently accepts or rejects this proposed state as the next state of the Markov chain. Provide the expression for the Metropolis Hastings accept probability $\alpha(x_{t+1},x_t)$ in terms of $p$ and $q$ for the Independence Sampler.
+\item[e)] Are two subsequent samples from the Independence Sampler independent or dependent in general? Explain your answer.
+\item[f)] Imagine we run the Independence sampler for $5$ steps and during these $5$ steps we propose the states $x_1,x_2,x_3,x_4,x_5$ (think of these represent as numeric values, e.g. 0.34, 3.5, 2.67, 0.82, 1.60). The MCMC procedure rejects the proposals $x_2$ and $x_5$. Which sequence of states will the Independence sampler generate after $5$ steps?
+\item[g)] Will any of the three samplers discussed above work in high-dimensional settings (e.g., $d>20$)? Explain your answer by discussing how this ``curse of dimensionality'' will affect each of the three samplers discussed above.
+\end{itemize}
+\end{problem}
+
+
+\begin{problem}\textsf{Random walk}
+
+Consider a state space $z$ consisting of the integers, with probability
+\begin{eqnarray}
+p(z^{(r+1)} = z^{(r)}) & = & 0.5 \nonumber \\
+p(z^{(r+1)} = z^{(r)}+1) & = & 0.25 \nonumber \\
+p(z^{(r+1)} = z^{(r)}-1) & = & 0.25 \nonumber 
+\end{eqnarray}
+where $z^{(r)}$ denotes the state at step $r$. If the initial state is $z^{(1)}=0$, prove that 
+$$
+\mathbb{E}\left[(z^{(r)})^2\right]=\frac{r}{2}
+$$
+
+\end{problem}
+
+
+\begin{problem}\textsf{Bishop 11.13}
+
+\noindent Consider a simple 3-node graph shown in Figure \ref{fig:gauss} in which
+\begin{eqnarray}
+x & \sim & \distNorm(x|\mu,\tau^{-1}) \nonumber\\
+\mu & \sim & \distNorm(\mu|\mu_0,s_0) \nonumber\\
+\tau & \sim & \text{Gamma}(\tau|a,b)
+\end{eqnarray}
+Derive Gibbs sampling for the posterior distribution $p(\mu,\tau|x)$.
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\node[nObs,] (mu) at (-1.5,1.5) {$\mu$};
+\node[obs,] (x) at (0,0) {$x$};
+\node[nObs,] (tau) at (1.5,1.5) {$\tau$};
+\draw [->, thick, shorten <=2pt, shorten >=2pt] (mu) -- (x);
+\draw [->, thick, shorten <=2pt, shorten >=2pt] (tau) -- (x);
+\end{tikzpicture}
+\caption{A graph involving an observed Gaussian variable $x$ with prior distributions over its mean $\mu$ and precision $\tau$}
+\label{fig:gauss}
+\end{center}
+\end{figure}
+\end{problem}
+
+\begin{problem}
+\begin{figure}[H]
+\begin{center}
+\tikz{ %
+\node[obs]                   (w)      {$w_{dn}$} ;
+\node[latent, right=of w] (phi) {$\vt{\phi}$};
+\node[latent, above=of w] (z) {$z_{dn}$};
+\node[latent, above=of z] (theta) {$\vt{\theta}_d$};
+\node[const, right=of theta] (alpha) {$\alpha$};
+\node[const, right=of phi] (beta) {$\beta$};
+\node[const, left=0.5cm of w] (N) {$n=1,\dots,N_d$};
+\edge[->]{alpha}{theta}
+\edge[->]{theta}{z}
+\edge[->]{z}{w}
+\edge[->]{beta}{phi}
+\edge[->]{phi}{w}
+ \plate {plate1} { %
+    (N)(z) %
+  }{};
+ \plate {} { %
+    (plate1)(theta)
+  } {$d=1,\dots,D$} ; 
+ }
+\caption{Graphical model representation of LDA}
+\label{fig:lda}
+\end{center}
+\end{figure}
+The generative process of  LDA model is given as
+\begin{enumerate}[(i)]
+\item For $k=1,\dotsc,K$:
+	\begin{enumerate}
+	\item $\vt{\phi}_k \in \R^{|V|} \sim \text{Dir}(\beta,\dotsc,\beta)$
+	\end{enumerate}
+\item For each document $\vt{w}_d \in \mathcal{D}$
+\begin{enumerate}
+	\item Draw a topic distribution $\vt{\theta}_d \sim \text{Dir}(\alpha,\dotsc,\alpha)$
+	\item For each of the $N$ word $w_n$ in the document:
+		\begin{enumerate}
+		\item $z_{dn} \sim \text{Mult}(\vt{\theta}_d)$.
+		\item $w_{dn}|z_{dn},\phi_{dn} \sim \text{Mult}(\phi_{dn})$
+		\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+Assume our data consists of $D$ documents, a vocabulary of size $V$, and we model with $K$ topics. Let $A_{dk}=\sum\limits_{n=1}^{N_d}\delta(z_{dn}=k)$ be the number of $z_{dn}$ variables taking on value $k$ in document $\vt{w}_d$, and $B_{kw}=\sum\limits_{d=1}^D\sum\limits_{i=n}^{N_d}\delta(w_{dn}=w)\delta(z_{dn}=k)$ be the number of times word $w$ is assigned to topic $k$, where $N_d$ is the total number of words in document $\vt{w}_d$, and let $M_k=\sum\limits_{w}B_{kw}$ be the total number of words assigned to topic $k$.
+\begin{enumerate}
+\item Write down the joint probability over the observed data and latent variables.
+\item Integrate out the parameters $\vt{\theta}_d$'s and $\vt{\phi}_k$'s from the joint probability. Express this result in terms of the counts $N_d$, $M_k$, $A_{dk}$, and $B_{kw}$.
+\item Derive the Gibbs sampling updates for $z_{di}$ with all parameters integrated out.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Consider a multivariate Bernoulli distribution
+$$p(\B{x} | \B{\mu}) = \prod_{i=1}^D \mu_i^{x_i} (1-\mu_i)^{1-x_i}$$
+where $\B{x} = (x_1,\dots,x_D)$ and $\B{\mu} = (\mu_1,\dots,\mu_D)$, with $\mu_i \in [0,1], x_i \in \{0,1\}$ for $i=1,\dots,D$. 
+\begin{itemize}
+  \item[a)] What is the mean of $\B{x}$ under this distribution?
+  \item[b)] What is the covariance matrix of $\B{x}$ under this distribution?
+ \end{itemize}
+  Now consider a mixture of $K$ of these multivariate Bernoulli distributions
+$$p(\B{x} | \B{\mu},\B{\pi}) = \sum_{k=1}^K \pi_k p(\B{x} | \B{\mu}_k)$$
+where $\B{\pi} = (\pi_1, \dots, \pi_K)$ and $\B{\mu} = (\B{\mu}_1,\dots,\B{\mu}_K)$, and
+$$p(\B{x} | \B{\mu}_k) = \prod_{i=1}^D \mu_{ki}^{x_i} (1-\mu_{ki})^{1-x_i}$$
+\begin{itemize}
+  \item[c)] What is the mean of $\B{x}$ under this mixture distribution? 
+ \end{itemize}
+ Suppose we are given a data set $\B{X} = (\B{x}_1,\dots,\B{x}_N)$.
+ 
+\begin{itemize}
+  \item[d)] Write down the log-likelihood function for this model. Make the expression as explicit as possible, and use brackets to remove any ambiguity regarding what is summed over in the expression.
+  \item[e)] Why doesn't standard maximum-likelihood work here? 
+\end{itemize}
+
+We will use the Variational EM algorithm to learn the parameters of the model. For each datapoint $\B{x}_n$,
+introduce a latent variable $\B{z}_n = (z_{n1},\dots,z_{nK})$ which is a one-of-K coded
+binary vector that indicates the latent class of that datapoint. In other words: the latent variable 
+$\B{z}_n$ has $K$ components, all of which are 0 except for the $k$'th one that is 1, where $k$ is
+the latent class for data point $\B{x}_n$. 
+Using these conventions, for data point $\B{x}_n$ and associated latent class $\B{z}_n$, we can write:
+$$p(\B{x}_n, \B{z}_n | \B{\mu}, \B{\pi}) =  p(\B{z}_n | \B{\pi}) p(\B{x}_n | \B{z}_n, \B{\mu}) = \prod_{k=1}^K \pi_k^{z_{nk}} p(\B{x}_n | \B{\mu}_k)^{z_{nk}}$$ 
+
+\begin{itemize}
+  \item[f)] Write down the complete-data log-likelihood function for this model. Make the expression as explicit as possible, and use brackets to remove any ambiguity regarding what is summed over in the expression. 
+  \item[g)] Draw the corresponding graphical model using plate notation. Clearly distinguish observed variables, latent variables, parameters, and make clear which variable subscripts are ``looped over'' if you use plates.
+  \item[h)] Write down an explicit expression for the VEM objective function $\C{B}(\{q_n(\B{z}_n)\},\B{\mu},\B{\pi})$ for this model.
+  \item[i)] Include Lagrange multipliers for all constraints in the model and construct the Lagrangian $\C{\tilde{B}}$ from $\C{B}$. Make the Lagrangian as explicit as possible. 
+  \item[j)] Work out the details of the E-step, i.e., optimize $\C{\tilde{B}}$ with respect to $q_n$ for all $n=1,\dots,N$. Solve the equation. What is the interpretation of $q_n(\B{z}_n)$? 
+  \item[k)] Work out the details of the M-step for $\B{\pi}$, i.e., optimize $\C{\tilde{B}}$ with respect to $\pi_k$ for all $k$. Solve the equation. 
+  \end{itemize}
+\end{problem}
+\end{document}
