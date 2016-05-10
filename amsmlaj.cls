@@ -5,7 +5,7 @@
 % v.01, November 01, 2014
 
 % Modified by Andrea Jemmett
-% v.01.05, May 01, 2016
+% v.01.06, May 10, 2016
 
 \ProvidesClass{amsmlaj}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
@@ -136,7 +136,8 @@ Proof Sketch:~~}}
 
 %%%%%%%%%%%%%%%%%%%%%%% general useful macros
 \newcommand{\eqdef}{\mathbin{\stackrel{\rm def}{=}}}
-\newcommand{\C}{{\mathbb{C}}}
+%\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\C}[1]{{\mathcal{#1}}}
 \newcommand{\R}{{\mathbb R}}
 \newcommand{\N}{{\mathbb{N}}}
 \newcommand{\Z}{{\mathbb Z}}
@@ -153,6 +154,8 @@ Proof Sketch:~~}}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+\newcommand{\B}[1]{\bm{\mathbf{#1}}} % make it consistent with Joris's latex
 
 
 %%%%%%%%%%%%%%%%%%% macros particular to this course
