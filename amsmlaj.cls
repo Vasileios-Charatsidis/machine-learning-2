@@ -5,7 +5,7 @@
 % v.01, November 01, 2014
 
 % Modified by Andrea Jemmett
-% v.01.06, May 10, 2016
+% v.01.07, May 11, 2016
 
 \ProvidesClass{amsmlaj}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
@@ -51,6 +51,8 @@
 
 \usepackage{hyperref}
 \hypersetup{pdftex, colorlinks=true, allcolors=blue}
+
+\usepackage[ruled,linesnumbered]{algorithm2e}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
