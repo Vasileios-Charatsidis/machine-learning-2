@@ -66,11 +66,24 @@ In this question we are interested in generating samples from a probability dens
 			value for $x_i$ is set to the proposed value of the previous step
 			$x_{i-1}$. So with respect to the example run, the resulting
 			sequence of states is $x_1, x_1, x_3, x_4, x_4$.
+		\item[g)] To analyse the performance of each sampler in an high-dimensional
+			setting, we need to look at the acceptance rate of the sampler. For
+			the rejection sampler it is given by $1/c \int \tilde{q}(x)\mathrm{d}x$
+			and we reject samples that fall in between the proposed distribution
+			and the target distribution. In an high-dimensional space, this
+			volume becomes larger and larger even for optimal values of
+			$c$ or $c\tilde{q}$ and so the sampler will reject most of the
+			samples. \\
+			The Importance Sampler instead accepts all samples but weights them, as we
+			have seen, proportionally to the ratio $p(x_n)/q(x_n)$, so it should work
+			fairly well in an high-dimensional setting. A similar argument can be
+			applied to the Independence Sampler, as long as the proposal distribution
+			has a similar shape as the target one.
 	\end{itemize}
 \end{sol}
-
 \end{problem}
 
+\newpage
 
 \begin{problem}\textsf{Random walk}
 
@@ -271,5 +284,85 @@ $$p(\B{x}_n, \B{z}_n | \B{\mu}, \B{\pi}) =  p(\B{z}_n | \B{\pi}) p(\B{x}_n | \B{
   \item[j)] Work out the details of the E-step, i.e., optimize $\C{\tilde{B}}$ with respect to $q_n$ for all $n=1,\dots,N$. Solve the equation. What is the interpretation of $q_n(\B{z}_n)$? 
   \item[k)] Work out the details of the M-step for $\B{\pi}$, i.e., optimize $\C{\tilde{B}}$ with respect to $\pi_k$ for all $k$. Solve the equation. 
   \end{itemize}
+
+\begin{sol}
+	\begin{itemize}
+		\item[a)] \hfill \vspace{-1cm}
+			\begin{align}
+				\Ex[x_i]&=\sum_{x_i \in \{0,1\}}x_ip(x_i|\mu_i)
+				=\sum_{x_i \in {0,1}}x_i\mu_i^{x_i}(1-\mu_i)^{1-x_i}
+				=\mu_i \\
+				\Ex[\vt{x}]&=\vt{\mu}
+			\end{align}
+		\item[b)] \hfill \vspace{-1cm}
+			\begin{align}
+				cov[\vt{x}]&=\text{diag}\{\mu_i(1-\mu)\}
+			\end{align}
+		\item[c)] \hfill \vspace{-1cm}
+			\begin{align}
+				\Ex[x_i]&=\sum_{x_i}x_i\left[\sum_k\pi_kp(x_i|\mu_{ki})\right]
+				=\sum_k \pi_k\mu_{ki} \\
+				\Ex[\vt{x}]&=\sum_k \pi_k \vt{\mu}_k
+			\end{align}
+		\item[d)] \hfill \vspace{-1cm}
+			\begin{align}
+				\ln p(\vt{X}|\mu,\pi)&=\ln\left[\prod_{n=1}^Np(\vt{x}_n|\vt{\mu},\vt{\pi})\right]
+				=\sum_{n=1}^N \ln \left\{ \sum_{k=1}^K \pi_k p(\vt{x}_n|\vt{\mu}_k) \right\}
+			\end{align}
+		\item[e)] Because we have a summation inside the logarithm, we cannot find a
+			closed-form solution. That is, the sum prevents the logarithm from
+			acting directly on the joint distribution, resulting in complicated expressions.
+		\item[f)] \hfill \vspace{-1cm}
+			\begin{align}
+				\ln p(\vt{X},\vt{Z}|\vt{\mu},\vt{\pi})
+				&=\ln \prod_{n=1}^N p(\vt{x}_n,\vt{z}_n|\vt{\mu},\vt{\pi})
+				=\ln \prod_{n=1}^N \prod_{k=1}^K\pi_k^{z_{nk}}p(\vt{x}_n|\vt{\mu}_k)^{z_{nk}} \\
+				&=\sum_{n=1}^N\sum_{k=1}^K \left\{
+					z_{nk}\ln\pi_k
+					+z_{nk}\ln \prod_{i=1}^D \mu_{ki}^{x_{ni}}(1-\mu_{ki})^{1-x_{ni}}
+				\right\} \\
+				&=\sum_{n=1}^N\sum_{k=1}^K z_{nk} \left\{
+					\ln \pi_k
+					+\sum_{i=1}^D \left[
+						x_{ni}\ln\mu_{ki}+(1-x_{ni})\ln(1-\mu_{ki})
+					\right]
+				\right\}
+			\end{align}
+		\item[g)] \hfill \vspace{-1cm}
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}
+					\node[obs] (xn) {$\vt{x}_n$} ;
+					\node[latent, above=of xn] (zn) {$\vt{z}_n$} ;
+					\node[const, right=of zn] (pik) {$\pi_k$} ;
+					\node[const, right=of xn] (muk) {$\vt{\mu}_k$} ;
+					\plate {plate_n} { (xn)(zn) } {$N$} ;
+					\plate {plate_k} { (pik)(muk) } {$K$} ;
+					\edge[->]{zn}{xn} ;
+					\edge[->]{pik}{zn} ;
+					\edge[->]{muk}{xn} ;
+				\end{tikzpicture}
+				\caption{Graphical model for the mixture of Bernoulli VEM.}
+				\label{fig:bernvem}
+			\end{figure}
+		\item[h)] \hfill \vspace{-1cm}
+			\begin{align}
+				\mathcal{B}(\{q_n(\vt{z}_n)\},\vt{\mu},\vt{\pi})
+				&=\sum_{n=1}^N\sum_{k=1}^K q_n(\vt{z}_n) \left[
+					\ln\pi_k + \left(
+					\sum_{i=1}^D x_{ni}\ln\mu_{ki}
+					+(1-x_{ni})\ln(1-\mu_{ki})
+					\right) - \ln q_n(\vt{z}_n)
+				\right]
+			\end{align}
+		\item[i)] \hfill \vspace{-1cm}
+			\begin{align}
+				\mathcal{\tilde{B}}(\{q_n(\vt{z}_n)\},\vt{\mu},\vt{\pi})
+				&=\mathcal{B}(\{q_n(\vt{z}_n)\},\vt{\mu},\vt{\pi})
+				+\lambda\left( \sum_{k=1}^K\pi_k - 1 \right)
+				+\sum_{n=1}^N\lambda_n \left( \sum_{\vt{z}_n}q_n(\vt{z}_n) - 1 \right)
+			\end{align}
+	\end{itemize}
+\end{sol}
 \end{problem}
 \end{document}
