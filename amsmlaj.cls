@@ -5,7 +5,7 @@
 % v.01, November 01, 2014
 
 % Modified by Andrea Jemmett
-% v.01.07, May 11, 2016
+% v.01.08, May 12, 2016
 
 \ProvidesClass{amsmlaj}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
@@ -53,7 +53,7 @@
 \hypersetup{pdftex, colorlinks=true, allcolors=blue}
 
 \usepackage[ruled,linesnumbered]{algorithm2e}
-
+\usepackage[makeroom]{cancel}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % math notion
