@@ -110,6 +110,76 @@ Derive Gibbs sampling for the posterior distribution $p(\mu,\tau|x)$.
 \label{fig:gauss}
 \end{center}
 \end{figure}
+
+\newpage
+\begin{sol}
+	To apply Gibbs sampling to the posterior distribution $p(\mu,\tau|x)$ we need
+	an expression for the distributions $p(\mu|x,\tau)$ and $p(\tau|x,\mu)$, as
+	hinted in Bishop. We first write down the joint probability:
+	\begin{align}
+		p(x,\mu,\tau)
+		&=p(x|\mu,\tau)p(\mu)p(\tau) \\
+		&=\distNorm(x|\mu,\tau^{-1})\distNorm(\mu|\mu_0,s_0)\text{Gamma}(\tau|a,b)
+	\end{align}
+	from which we can compute the required conditionals:
+	\begin{align}
+		p(\mu|x,\tau)
+		&=\frac{p(x,\mu,\tau)}{p(x,\tau)} \\
+		&=\frac{p(x,\mu,\tau)}{\int p(x,\mu,\tau)\mathrm{d}\mu} \\
+		&=\frac{p(x|\mu,\tau)p(\mu)\cancel{p(\tau)}}{\cancel{p(\tau)}\int p(x|\mu,\tau)p(\mu)\mathrm{d}\mu} \\
+		&=\frac{p(x|\mu,\tau)p(\mu)}{\int p(x|\mu,\tau)p(\mu)\mathrm{d}\mu} \\
+		&\propto \distNorm(x|\mu,\tau^{-1}) \distNorm(\mu|\mu_0,s_0) \\
+		&=\frac{1}{\sqrt{2\pi\tau^{-1}}} \exp\left\{
+			-\frac{(x-\mu)^2}{2\tau^{-1}}
+		\right\} \frac{1}{\sqrt{2\pi s_0}} \exp\left\{
+			-\frac{(\mu-\mu_0)^2}{2s_0}
+		\right\} \\
+		&\propto \exp\left\{
+			-\frac{(x-\mu)^2}{2\tau^{-1}}
+			-\frac{(\mu-\mu_0)^2}{2s_0}
+		\right\} \\
+		&= \exp\left\{
+			-\frac{1}{2}\tau(x^2+\mu^2-2x\mu)
+			-\frac{1}{2s_0}(\mu^2+\mu_0^2-2\mu\mu_0)
+		\right\} \\
+		&= \exp\left\{
+			-\left(\frac{1}{2}\tau+\frac{1}{2s_0}\right)\mu^2
+			+\left(\tau x + \frac{\mu_0}{s_0}\right)\mu
+			+ \text{const}
+		\right\} \\
+		&= \exp\left\{
+			-\left(\frac{1}{2}\tau+\frac{1}{2s_0}\right)
+			\left(\mu-\frac{\tau x + \frac{\mu_0}{s_0}}{\tau+\frac{1}{s_0}}\right)^2
+			+ \text{const}
+		\right\} \\
+		&\propto \distNorm\left(
+			\mu\middle|\frac{\tau x - \frac{\mu_0}{s_0}}{\tau+\frac{1}{s_0}},\left(\tau+\frac{1}{s_0}\right)^{-1}
+		\right) \\
+		&= \distNorm\left(
+		\mu\middle|\frac{\tau x - \frac{\mu_0}{s_0}}{\tau+\frac{1}{s_0}},(\tau^{-1}+s_0)
+		\right)
+	\end{align}
+	where const denotes terms independent of $\mu$. In an analogous way we have
+	\begin{align}
+		p(\tau|x,\mu)
+		&=\frac{p(x,\mu,\tau)}{p(x,\tau)} \\
+		&=\frac{p(x,\mu,\tau)}{\int p(x,\mu,\tau)\mathrm{d}\tau} \\
+		&=\frac{p(x|\mu,\tau)\cancel{p(\mu)}p(\tau)}{\cancel{p(\mu)}\int p(x|\mu,\tau)p(\tau)\mathrm{d}\tau} \\
+		&=\frac{p(x|\mu,\tau)p(\tau)}{\int p(x|\mu,\tau)p(\tau)\mathrm{d}\tau} \\
+		&\propto \distNorm(x|\mu,\tau^{-1}) \text{Gamma}(\tau|a,b) \\
+		&=\frac{1}{\sqrt{2\pi\tau^{-1}}} \exp\left\{
+			-\frac{(x-\mu)^2}{2\tau^{-1}}
+		\right\} \frac{b^a}{\Gamma(a)}\tau^{a-1} e^{-b\tau} \\
+		&=\frac{1}{\sqrt{2\pi}} \tau^{\frac{1}{2}} \frac{b^a}{\Gamma(a)} \tau^{a-1} \exp\left\{
+			-\frac{(x-\mu)^2}{2\tau^{-1}} - b\tau
+		\right\} \\
+		&=\frac{b^a}{\sqrt{2\pi}\Gamma(a)} \tau^{a-\frac{1}{2}} \exp\left\{
+			-\frac{1}{2}\tau[(x-\mu)^2+2b]
+		\right\} \\
+		&\propto \text{Gamma}\left( \tau \middle| a+\frac{1}{2}, \frac{1}{2}[(x-\mu)^2+2b] \right)
+	\end{align}
+\end{sol}
+
 \end{problem}
 
 \begin{problem}
