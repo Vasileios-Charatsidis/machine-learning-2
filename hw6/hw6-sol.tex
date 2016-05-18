@@ -60,6 +60,60 @@
 			\end{align}
 			while $p(Y|X)$ is already a term of the factorization for the graph in
 			Figure \ref{fig:cbn2}.
+		\item[(d)] For the Causal Bayesian Networks in Figures \ref{fig:cbn1},
+			\ref{fig:cbn2} and \ref{fig:cbn3} respectively we have:
+			\begin{align}
+				p(Y|do(X)) &= p(Y) \\
+				p(Y|do(X)) &= \frac{p(X,Y)}{p(X)} = p(Y|X) \\
+				p(Y|do(X)) &= p(Y)
+			\end{align}
+		\item[(e)] % TODO
+	\end{itemize}
+\end{sol}
+\end{problem}
+
+\begin{problem}{\textbf{Simpson's paradox}}
+\begin{sol}
+	\begin{itemize}
+		\item[1a.] The recovery rate for \textit{treatment} is 50\%, while for
+			\textit{untreated} is 40\%.
+		\item[1b.] I would advise to take the drug because the recovery rate is
+			higher for the \textit{treatment} group.
+		\item[2a.]
+			\begin{tabular}[H]{ l | l | l }
+				\textbf{Recovery rates} & Drug & No drug \\
+				\hline
+				Male & 60\% & 70\% \\
+				Female & 20\% & 30\%
+			\end{tabular}
+		\item[2b.] I would not advice to take the drug nor to male patients nor to
+			female patients because the recovery rate, given the patient's gender supports it.
+		\item[3.] With hindsight I would not advice a patient with unknown gender to
+			take the drug because for both genders the recovery rate does not support
+			it. This is in contradiction with the conclusion given in (1b).
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\node[obs] (M) at (0,0) {$M$};
+				\node[obs] (D) at (-1,-1) {$D$};
+				\node[obs] (R) at(1,-1) {$R$};
+				\draw[->] (M) -- (D);
+				\draw[->] (M) -- (R);
+				\draw[->] (D) -- (R);
+			\end{tikzpicture}
+			\caption{Causal model where $M$ denotes the gender.}
+			\label{fig:p3i}
+		\end{figure}
+		\item[4a.] By applying the back-door criterion on the causal model in Figure
+			\ref{fig:p3i} we have:
+			\begin{align}
+				p(R|do(D)) &= \sum_M p(R|D,M)p(M)
+			\end{align}
+		\item[4b.] Using normal probability rules we have:
+			\begin{align}
+				p(R|D) &= \sum_M p(R,M|D) = \sum_M p(R|D,M)p(M)
+			\end{align}
+			and so $p(R|do(D)) = p(R|D)$ in this case.
 	\end{itemize}
 \end{sol}
 \end{problem}
