@@ -1,0 +1,69 @@
+\documentclass{amsmlaj}
+\begin{document}
+\lecturesol{Homework 6}{Ke Tran}{m.k.tran@uva.nl}{19 May, 2016}
+{Andrea Jemmett}{11162929}{andrea.jemmett@student.uva.nl}{N/A}
+
+
+\begin{problem}
+\end{problem}
+
+\begin{problem}
+\begin{sol}
+	\begin{itemize}
+		\item[(a)] \hfill \vspace{-1cm}
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}[b]{.3\textwidth}
+					\centering
+					\begin{tikzpicture}
+						\node[nObs] (x) at (0,0) {$X$};
+						\node[nObs] (y) at (1.5,0) {$Y$};
+					\end{tikzpicture}
+					\caption{No cause-effect relation}
+					\label{fig:cbn1}
+				\end{subfigure}
+				\begin{subfigure}[b]{.3\textwidth}
+					\centering
+					\begin{tikzpicture}
+						\node[nObs] (x) at (0,0) {$X$};
+						\node[nObs] (y) at (1.5,0) {$Y$};
+						\draw[->] (x) -- (y);
+					\end{tikzpicture}
+					\caption{$X$ causes $Y$}
+					\label{fig:cbn2}
+				\end{subfigure}
+				\begin{subfigure}[b]{.3\textwidth}
+					\centering
+					\begin{tikzpicture}
+						\node[nObs] (x) at (0,0) {$X$};
+						\node[nObs] (y) at (1.5,0) {$Y$};
+						\draw[->] (y) -- (x);
+					\end{tikzpicture}
+					\caption{$Y$ causes $X$}
+					\label{fig:cbn3}
+				\end{subfigure}
+				\caption{Two nodes Causal Bayesian Networks}
+				\label{fig:cbn}
+			\end{figure}
+		\item[(b)] For the Causal Bayesian Networks in Figures \ref{fig:cbn1},
+			\ref{fig:cbn2} and \ref{fig:cbn3} respectively we have:
+			\begin{align}
+				p(X,Y) &= p(X)p(Y) \\
+				p(X,Y) &= p(Y|X)p(X) \\
+				p(X,Y) &= p(X|Y)p(Y)
+			\end{align}
+		\item[(c)] For the Causal Bayesian Networks in Figures \ref{fig:cbn1}
+			and \ref{fig:cbn3} respectively we have:
+			\begin{align}
+				p(Y|X) &= p(X)p(Y) \\
+				p(Y|X) &= \frac{p(X|Y)p(Y)}{p(X)} = \frac{p(X|Y)p(Y)}{\sum_Y p(X|Y)p(Y)}
+			\end{align}
+			while $p(Y|X)$ is already a term of the factorization for the graph in
+			Figure \ref{fig:cbn2}.
+	\end{itemize}
+\end{sol}
+\end{problem}
+
+
+\end{document}
+
