@@ -1,13 +1,10 @@
 \documentclass{amsmlaj}
 \begin{document}
-\lecturesol{Homework 6}{Ke Tran}{m.k.tran@uva.nl}{19 May, 2016}
+\lecturesol{Homework 6}{Ke Tran}{m.k.tran@uva.nl}{21 May, 2016}
 {Andrea Jemmett}{11162929}{andrea.jemmett@student.uva.nl}{N/A}
 
 
-\begin{problem}
-\end{problem}
-
-\begin{problem}
+\paragraph{Problem 2.}
 \begin{sol}
 	\begin{itemize}
 		\item[(a)] \hfill \vspace{-1cm}
@@ -67,17 +64,22 @@
 				p(Y|do(X)) &= \frac{p(X,Y)}{p(X)} = p(Y|X) \\
 				p(Y|do(X)) &= p(Y)
 			\end{align}
-		\item[(e)] % TODO
+		\item[(e)] $p(Y|X)$ is the probability of having lung cancer given the
+			\textit{observation} of smoking. $p(Y|do(X))$ instead represents the
+			probability of having lung cancer given that we \textit{force} that
+			person to (not) smoke. Usual conditioning captures the correlation
+			between two random variables whereas the do-operator represents an
+			active intervention on the model and is capable of representing
+			causation relationships.
 	\end{itemize}
 \end{sol}
-\end{problem}
 
-\begin{problem}{\textbf{Simpson's paradox}}
+\paragraph{Problem 3. Simpson's paradox}
 \begin{sol}
 	\begin{itemize}
 		\item[1a.] The recovery rate for \textit{treatment} is 50\%, while for
 			\textit{untreated} is 40\%.
-		\item[1b.] I would advise to take the drug because the recovery rate is
+		\item[1b.] I would advice to take the drug because the recovery rate is
 			higher for the \textit{treatment} group.
 		\item[2a.]
 			\begin{tabular}[H]{ l | l | l }
@@ -86,12 +88,13 @@
 				Male & 60\% & 70\% \\
 				Female & 20\% & 30\%
 			\end{tabular}
-		\item[2b.] I would not advice to take the drug nor to male patients nor to
-			female patients because the recovery rate, given the patient's gender supports it.
+		\item[2b.] I would not advice to take the drug nor to male nor
+			female patients because the recovery rate, given the patient's gender,
+			does not support it.
 		\item[3.] With hindsight I would not advice a patient with unknown gender to
 			take the drug because for both genders the recovery rate does not support
 			it. This is in contradiction with the conclusion given in (1b).
-		\begin{figure}[H]
+		\begin{figure}[h]
 			\centering
 			\begin{tikzpicture}
 				\node[obs] (M) at (0,0) {$M$};
@@ -109,14 +112,113 @@
 			\begin{align}
 				p(R|do(D)) &= \sum_M p(R|D,M)p(M)
 			\end{align}
+			because $M$ is admissible for adjustment to find the causal effect of $D$ on $R$.
 		\item[4b.] Using normal probability rules we have:
 			\begin{align}
-				p(R|D) &= \sum_M p(R,M|D) = \sum_M p(R|D,M)p(M)
+				p(R|D) &= \sum_M p(R,M|D) = \sum_M p(R|D,M)p(D|M)
 			\end{align}
-			and so $p(R|do(D)) = p(R|D)$ in this case.
+			which is generally not equal to $\sum_Mp(R|D,M)p(M)$ and so
+			$p(R|do(D)) \neq p(R|D)$ in this case.
+		\item[4c.] We have expressed $p(R|do(D))$ in terms of observables and we
+			have the data to carry on the calculation:
+			\begin{align}
+				p(R|do(D)) &= p(R|D,M=m)p(M=m) + p(R|D,M=f)p(M=f) = 40\% \\
+				p(R|do(\neg D)) &= p(R|\neg D,M=m)p(M=m) + p(R|\neg D,M=f)p(M=f) = 50\%
+			\end{align}
+			and so in this case I would not advice on taking the drug. The same
+			conclusion could have been reached without computation by noting that
+			$p(R|do(D)) \neq p(R|D)$.
+		\begin{figure}[h]
+			\centering
+			\begin{tikzpicture}
+				\node[obs] (M) at (0,0) {$M$};
+				\node[obs] (D) at (-1,-1) {$D$};
+				\node[obs] (R) at(1,-1) {$R$};
+				\draw[->] (D) -- (M);
+				\draw[->] (M) -- (R);
+				\draw[->] (D) -- (R);
+			\end{tikzpicture}
+			\caption{Causal model where $M$ denotes for example ``blood pressure''.}
+			\label{fig:p3ii}
+		\end{figure}
+		\item[5a.] By applying the back-door criterion to the causal model in Figure
+			\ref{fig:p3ii} we have:
+			\begin{align}
+				p(R|do(D)) &= p(R|D)
+			\end{align}
+			because $\emptyset$ is admissible for adjustment to find the causal effect of $D$ on $R$.
+		\item[5b.] Yes, $p(R|do(D)) = p(R|D)$.
+		\item[5c.] From the data we have that:
+			\begin{align}
+				p(R|do(D)) &= p(R|D) = 50\% \\
+				p(R|do(\neg D)) &= p(R|\neg D) = 40\%
+			\end{align}
+			so my advice in this case would be to take the drug. The same conclusion
+			could have been reached without computation by noting that $p(R|do(D)) = p(R|D)$.
+		\begin{figure}[h]
+			\centering
+			\begin{tikzpicture}
+				\node[obs] (M) at (0,0) {$M$};
+				\node[obs] (D) at (-1,-1) {$D$};
+				\node[obs] (R) at(1,-1) {$R$};
+				\node[nObs] (L1) at (-1,1) {$L_1$};
+				\node[nObs] (L2) at (1,1) {$L_2$};
+				\draw[->] (D) -- (R);
+				\draw[->] (L1) -- (D);
+				\draw[->] (L2) -- (R);
+				\draw[->] (L1) -- (M);
+				\draw[->] (L2) -- (M);
+			\end{tikzpicture}
+			\caption{Causal model where $M$, $L_1$ and $L_2$ have meanings given in (6a).}
+			\label{fig:p3iii}
+		\end{figure}
+		\item[6a.] We can imagine a causal model where $M$ denotes a certain kind of
+			a specific disease (a certain kind of influenza for example), which is
+			observed and so we can assume that it is diagnosable. The latent variables
+			$L_1$ and $L_2$ might represent whether the patient has a congenital
+			disorder that contributes as a cause to the observed disease and the effect
+			of the drug ($L_1$) and if among his/her ancestors the same disease is
+			present ($L_2$, so this affects the chances of recovery and the kind of
+			disease the patient may have). We can suppose that the congenital disorder is not
+			(easily) diagnosable and we do not have data for the patient's ancestors.
+			The causal model is given in Figure \ref{fig:p3iii}.
+		\item[6b.] We can do this in one step by applying the second rule of
+			do-calculus, because $(R \ci D)_{\mathcal{G}_{\underline{D}}}$:
+			\begin{align}
+				p(R|do(D)) &= p(R|D)
+			\end{align}
+		\item[6c.] Yes, $p(R|do(D)) = p(R|D)$ in this case.
+		\item[6d.] My advice in this case would be to take the drug for the same
+			reasons given in (5c).
 	\end{itemize}
 \end{sol}
-\end{problem}
+
+\newpage
+
+\paragraph{Problem 5. Truncated factorization}
+\begin{sol}
+	\begin{enumerate}
+		\item Assuming that both $Y$ and nodes in $\vt{X}_{pa(X)}$ have no parents
+			(this is just an assumption made to have a more uncluttered notation, but
+			the result and derivation hold also without it) we have:
+			\begin{align}
+				p(Y|do(X),\vt{X}_{pa(X)})
+				&=\frac{p(Y,\vt{X}_{pa(X)}|do(X))}{p(\vt{X}_{pa(X)}|do(X))} \\
+				&=\frac{p(Y)\prod_{X_i \in \vt{X}_{pa(X)}}p(X_i)}{\prod_{X_i \in \vt{X}_{pa(X)}}p(X_i)} \\
+				&=p(Y) \\
+				&=\frac{p(Y)p(X|\vt{X}_{pa(X)})}{p(X|\vt{X}_{pa(X)})} \\
+				&=\frac{p(Y,X,\vt{X}_{pa(X)})}{p(X,\vt{X}_{pa(X)})} \\
+				&=p(Y|X,\vt{X}_{pa(X)})
+			\end{align}
+		\item Using the previous result:
+			\begin{align}
+				p(Y|do(X))
+				&=\int p(Y|do(X),\vt{X}_{pa(X)})p(\vt{X}_{pa(X)}|do(X))\mathrm{d}\vt{X}_{pa(X)} \\
+				&=\int p(Y|X,\vt{X}_{pa(X)})\prod_{X_i \in \vt{X}_{pa(X)}}p(X_i)\mathrm{d}\vt{X}_{pa(X)} \\
+				&=\int p(Y|X,\vt{X}_{pa(X)})p(\vt{X}_{pa(X)})\mathrm{d}\vt{X}_{pa(X)}
+			\end{align}
+	\end{enumerate}
+\end{sol}
 
 
 \end{document}
