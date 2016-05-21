@@ -13,8 +13,8 @@
 				\begin{subfigure}[b]{.3\textwidth}
 					\centering
 					\begin{tikzpicture}
-						\node[nObs] (x) at (0,0) {$X$};
-						\node[nObs] (y) at (1.5,0) {$Y$};
+						\node[obs] (x) at (0,0) {$X$};
+						\node[obs] (y) at (1.5,0) {$Y$};
 					\end{tikzpicture}
 					\caption{No cause-effect relation}
 					\label{fig:cbn1}
@@ -22,8 +22,8 @@
 				\begin{subfigure}[b]{.3\textwidth}
 					\centering
 					\begin{tikzpicture}
-						\node[nObs] (x) at (0,0) {$X$};
-						\node[nObs] (y) at (1.5,0) {$Y$};
+						\node[obs] (x) at (0,0) {$X$};
+						\node[obs] (y) at (1.5,0) {$Y$};
 						\draw[->] (x) -- (y);
 					\end{tikzpicture}
 					\caption{$X$ causes $Y$}
@@ -32,8 +32,8 @@
 				\begin{subfigure}[b]{.3\textwidth}
 					\centering
 					\begin{tikzpicture}
-						\node[nObs] (x) at (0,0) {$X$};
-						\node[nObs] (y) at (1.5,0) {$Y$};
+						\node[obs] (x) at (0,0) {$X$};
+						\node[obs] (y) at (1.5,0) {$Y$};
 						\draw[->] (y) -- (x);
 					\end{tikzpicture}
 					\caption{$Y$ causes $X$}
@@ -206,11 +206,12 @@
 				&=\frac{p(Y,\vt{X}_{pa(X)}|do(X))}{p(\vt{X}_{pa(X)}|do(X))} \\
 				&=\frac{p(Y)\prod_{X_i \in \vt{X}_{pa(X)}}p(X_i)}{\prod_{X_i \in \vt{X}_{pa(X)}}p(X_i)} \\
 				&=p(Y) \\
-				&=\frac{p(Y)p(X|\vt{X}_{pa(X)})}{p(X|\vt{X}_{pa(X)})} \\
+				&=\frac{p(Y)p(X|\vt{X}_{pa(X)})p(\vt{X}_{pa(X)})}{p(X|\vt{X}_{pa(X)})p(\vt{X}_{pa(X)})} \\
 				&=\frac{p(Y,X,\vt{X}_{pa(X)})}{p(X,\vt{X}_{pa(X)})} \\
 				&=p(Y|X,\vt{X}_{pa(X)})
 			\end{align}
-		\item Using the previous result:
+		\item Using the previous result and the truncated factorization for
+			$p(\vt{X}_{pa(X)}|do(X))$:
 			\begin{align}
 				p(Y|do(X))
 				&=\int p(Y|do(X),\vt{X}_{pa(X)})p(\vt{X}_{pa(X)}|do(X))\mathrm{d}\vt{X}_{pa(X)} \\
