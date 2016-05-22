@@ -453,6 +453,198 @@ are no more pending messages, the product of the received messages at every node
 gives the (exact for tree) marginal. For loopy graphs however the algorithm may
 not converge and when we stop the marginals are \textit{approximate}.
 
+\subsection{EM,VM, VB}
+EM,VEM are learning algorithms, VB is for inference.\\
+If $Q=P$, use EM. If $Q$ is simpler than $P$, use VEM (easier computation, might
+never reach max, biased result)\\
+Bayes: approximate $P(\theta|X)$ (eg sampling). Maximize both $\theta$ and $\alpha$.\\
+\begin{tabular}{|c|c|c|}
+\hline
+Frequentist: & EM:  & VEM: \\
+ & unbiased, can overfit & biased, can overfit\\
+\hline
+Bayesian: & $P(\theta|X)$: & VB\\
+& best, but comp.hard,  & \\
+& no overfitting bc no fitting & \\
+& variance & \\
+\hline
+\end{tabular}
+Bayes does not overfit because you integrate over parameter space.
+
+\subsection{Variational EM Algorithm}
+Variational EM algorithm has two steps:\\
+ \textbf{E-Step:}\\
+  \underline{Solve}
+  $q_{t}(z_{n}|x_{n}) = p(z_{n}|x_{n},\theta_{t})\rightarrow B = l$
+,(or increase $B(\theta_t, q)$ over $q$). This is not easy to solve, but
+sometimes it can be done (for example in Mixture of Gaussians).
+
+It could be a situation where:\\
+$q(z|t) = \prod_{i=1}^k q(z|x)$
+The green dot upon the circle will be the best $q$ that approximates $p$ as it
+is the shortest point from $p$.
+
+\textbf{M-Step:}\\
+\underline{Solve}
+${t+1} = \arg\max_{\theta} \sum_{n} Eq_{t}[\log p(x_{n},z_{n}|\theta)]$
+, (or increase $B(\theta,q_{t})$ over $\theta$). Implicitly, $\theta$ is in that
+$q_{t}$ of the expectation because it is \underline{fixed} from the previous
+iteration. We maximize the lower bounds until we find the maximum. The
+convergence is rather slow. In terms of speed is not the best algorithm.\\
+\underline{Proof of Convergence:}\\
+We have to prove that:
+$h(\theta_{t}) \leq \ldots \leq h(\theta_{t+1})$
+
+$h(\theta_{t}) = B(\theta_{t},p(z|x,\theta_{t}))$
+$h(\theta_{t}) \leq B(\theta_{t+1},p(z|x,\theta_{t}))$
+, (M-Step): We maximise over $\theta_{t+1}$. So $B$ in eq.(13) must be bigger
+than the one in the (12). In the next step we have:
+$h(\theta_{t}) = l(\theta_{t+1})-\mathcal{KL}[q_{t}||p(z|x,\theta_{t+1})]$
+, (l=B+$\mathcal{KL}$) The distribution in Kullback-Leibler divergence are not
+the same so $\mathcal{KL}$ is not equal to $0$ at this occasion, due to the
+fact that the two terms of $\mathcal{KL}$ divergence are coming from different
+iterations. Hence, $h(\theta_{t}) \leq h(\theta_{t+1})$
+, cause $\mathcal{KL} \geq 0$.\\
+\textbf{Lower bound $\mathcal{L}(q)$ and KL-divergence}
+$\text{ln } p(X) = \mathcal{L}(q) + KL(q||p)$\\
+$\mathcal{L} (q) = \int q(Z) \text{ln } \big\{ \frac{p(X,Z)}{q(Z)} \big\} dZ$ \\
+$KL(q||p) = - \int q(Z) \text{ln } \big \{ \frac{p(Z|X)}{q(Z)} \big\} dZ$\\
+\textbf{Note that}\\
+$Q(\theta,\theta^{old})
+= \sum_z p(Z|X,\theta^{old}) \text{ln } p(X,Z|\theta)
+= \mathbb{E}_{Z|X,\theta^{old}}[\text{ln } p(X,Z|\theta)]$
+
+
+\section{Sampling Methods}
+\subsection{Rejection sampling}
+We take a $q(z)$ distribution, choose k for $kq(z) \geq p(z),e z \in p(z)$\\
+$p(accepted) = \int \lbrace p(z)/kq(z) \rbrace q(z) \mathrm{d}z
+= \frac{1}{K} \int p(z) \mathrm{d}z$
+\subsection{Adaptive rejection sampling}
+When we have a distribution $p(z)$ where $\ln p(z)$ has derivatives which are
+not increasing functions of z. The envelope distribution is a succession of
+linear functions.
+$q(z) = k_i \lambda_i \exp \lbrace -\lambda_i (z-z_i) \rbrace$.
+Then rejection sampling can be applied.
+\subsection{Importance sampling}
+Provides a framework for approximating distributions but does not provide a
+mechanism for drawing samples from them. Used when it is not easy to find a
+function that forms an upper bound. Note that q does not necessarily have to be
+a bound on p, as we weigh by the quotient of the two distributions. Samples are
+drawn from distribution q and weighed correspondingly:
+$x_i \approx \tilde{q}$, $w_i = \frac{\tilde{p}(x_i)}{\tilde{q}(x_i)}$
+Works bad in high dimensions as it is hard to find an x where both q(x) and p(x)
+are high in the high-dimensional space. If p and q overlap just a little, this
+will give a bad estimate.
+
+\subsection{Ancestral sampling (Likelihood Weighted sampling)}
+Given a Bayesian network, we can write down the joint probability as
+$p(z1)p(z2|z1)$. That means there is always a node in the tree that is not
+dependent on any other variable. We sample this node, and use the sample to draw
+samples for subsequent nodes. If we observe values ($x \in Ev$, evidences), we
+just select the observed value instead of sampling. Works bad in high dimensions
+as well.
+
+\subsection{Markov Chain Monte-Carlo (MCMC) sampling}
+MCMC runs ancestral sampling on a chain. Samples can no longer be drawn
+independently. $t \to 1$, $x_t \sim q_{\infty}(x_{\infty})$ Equilibrium or
+invariant distribution. We transition from $q_1$ to $q_2$ according to
+transition probability $T(x_2|x_1)$.\\
+$q(x_{t+1}, x_t) = T(x_{t+1}|x_t)q(x_t)$\\
+\textbf{Invariance}:
+We want to find T for a given p, such that $p = T p$ holds.\\
+\textbf{Detailed balance}:(or reversibility) We want to find T so that
+transition from one state to another has probability mass equal to the
+transition from that next state to the current. Thus, $p^*(z)T(z,z') =
+p^*(z')T(z',z)$. Distribution $p^*(z)$ is invariant if
+$p^*(z)=\sum_{z'}p^*(z')T(z',z)$\\
+Proof:$A_k(z',z) = \text{min }\big( 1,
+\frac{p(z')q(z|z')}{p(z)q(z'|z)} \big)$\\
+$p(z)q(z'|z)A_k(z',z) = \text{min } \big( p(z)q(z'|z),p(z')q(z|z') \big)$ [multiply by denom]\\
+$= \text{min }\big(p(z')q(z|z'), p(z)q(z'|z) \big)$ [order irrelevant]\\
+$= p(z')q(z|z')A_k(z,z')$
+\textbf{Ergodicity}:
+This algorithm needs ergodicity: A positive probability for every state (so all
+will be reached).\\
+\textit{For two transition kernels $T_1, T_2$ that are valid any linear
+combination of these two is a valid kernel.}
+
+\subsection{Metropolis-Hastings algorithm}
+In the $\tau$ step of the algorithm the current state is $z^{(\tau)}$, we draw
+sample $z^*$ from $q_k(z|z^{(\tau)})$, which it is been accepted with
+probability:
+$ A_k(z^*,z^{(\tau)}) =\min (1, \frac{p(z^*)q_k(z^{(\tau)}|z^*)}{p(z^{(\tau)}) q_k(z^*|z^{(\tau)})})$
+, where k labels the set of possible transitions. Metropolis-Hastings algorithm
+work better in high dimensions than previous methods, but is quite slow (as we
+perform a random walk).
+
+\subsection{Gibbs sampling}
+For a distribution $p(\mathbf{z})$, for each component of the distribution $z_i$
+draw a sample from the distribution of that variable given the values of the
+remaining variables:
+\begin{enumerate}
+\item Initialize $\{ z_i: i = 1, \dots ,M$
+\item For $\tau = 1,\dots ,T$:
+\begin{itemize}
+  \item Sample $z_1^{\tau+1} \sim p(z_1|z_2^{\tau},\dots , z_M^{\tau})$\\
+  $\vdots$
+  \item Sample $z_j^{\tau+1} \sim p(z_j|z_1^{\tau+1},\dots ,z_{j-1}^{\tau+1},z_{j+1}^{\tau},\dots , z_M^{\tau})$\\
+  $\vdots$
+  \item Sample $z_M^{\tau+1} \sim p(z_M|z_1^{\tau+1}, \dots ,z_{M-1}^{\tau+1}$
+\end{itemize}
+\end{enumerate}
+
+
+\section{HMMs + Kalman filters}
+\vspace{-.4em}
+\subsection{Markov models}
+\vspace{-.4em}
+First order Markov chains hold the Markov property which you whole history is
+only dependent on the current state. \textbf{First order}'s number of parameters
+will be: $k-1+k(k-1)$. \textbf{Second order}: $k^2-1+k^2(k-1)$.
+
+\vspace{-.4em}
+\subsection{HMMs}
+\vspace{-.4em}
+Useful in speech recognition, natural language processing, online character recognition...
+Discrete variables: HMM, Linear-Gaussian: LDS (Linear Dynamical System).\\
+$p(x,\ldots, x_n)
+= \sum_{z_1} \ldots \sum_{z_n}p(z_1)(\prod_{n=2}^N p(z_n|z_{n-1},A))\prod_{n=1} p(x_n|z_n)$\\
+For the first node:\\
+$p(z_1|\pi) = \prod_{k=1}^K \pi_k^{z_{1,k}}$\\
+$p(z_n|z_{n-1},A) = \prod_{k=1}^K \prod_{j=1}^K A_{jk}^{z_{n-1},jz_{nk}}$\\
+$p(x_n|z_n,\phi) = \prod_{k=1}^K p(x_n|\phi_k)^{z_{nk}}$\\
+Where A, $\phi$ and $\pi$ are the parameters of the model. $p(x_n|z_n,\phi)$ is
+model-dependent (e.g.: mixture of Gaussians, multinomial if discrete, etc).
+
+\vspace{-.4em}
+\subsubsection{Maximum likelihood (EM)}
+\vspace{-.4em}
+data: X, latent state: Z, parameters: $\theta = (\pi, A, \phi)$.\\
+$p(x|\theta) = \sum_z p (x,z|\theta)$\\
+This represents a sum of KN terms, which quickly becomes intractable, so we can use
+for instance the EM algorithm.\\
+\textbf{E-step:}\\
+$Q(\theta|\theta^{old}) = \sum_z p (z|x,\theta^{old})\ln p (x,z|\theta)$\\
+\textbf{M-step:}\\
+$\theta^{new} = \arg\max_{\theta}Q(\theta|\theta^{old})$\\
+EM-general:\\
+$\ln p(X|\theta) = \mathcal{L}(q, \theta) + \mathcal{KL}(q||p)$ where
+$\mathcal{L}(q, \theta) = \sum_Z q(Z) \ln(\frac{p(X, Z| \theta)}{ q(Z)})$ and
+$\mathcal{KL}(q||p) = -\sum_Z q(Z) \ln(\frac{p(Z| X, \theta)}{q(Z)})$.\\
+E-step: maximize $\mathcal{L}(q, \theta)$ wrt $q(Z)$.
+M-step: maximize $\mathcal{L}(q, \theta)$ wrt $\theta$.
+
+\subsubsection{Forward-Backward}
+$$a(z_n) = p(x_n|z_n) \sum_{z_{n-1}} a(z_{n-1})p(z_n|z_{n-1})$$
+$$\beta(z_n) = \sum_{z_{n+1}} \beta(z_{n+1}) p(x_{n=1}|z_{n+1})p(z_{n+1}|z_n)$$
+\textbf{Predictive distribution}: Add $x_{n+1}$ and $z_{n+1}$ at the end of the
+chain and use the calculated parameters to predict the new values.(assuming the
+chain is homogeneous). By d-separation (if applicable), $p(x_{N+1}|X) =
+p(x_{N+1}|x_{N})$ (regular Markov Chain, add $z$'s to taste.
+
+
+
 \section{Mathematical Tricks}
 $-\frac{1}{2}(x-\mu)^\top\Sigma^{-1}(x-\mu) = -\frac{1}{2}x^\top \Sigma^{-1}x +
 x^\top \Sigma^{-1} \mu + c$\\
@@ -476,4 +668,3 @@ g(\eta) = \mathbb{E}[u(x)]$
 
 \end{multicols*}
 \end{document}
-
