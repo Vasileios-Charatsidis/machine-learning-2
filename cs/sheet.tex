@@ -682,28 +682,32 @@ Discrete variables: HMM, Linear-Gaussian: LDS (Linear Dynamical System).\\
 $p(x,\ldots, x_n)
 = \sum_{z_1} \ldots \sum_{z_n}p(z_1)(\prod_{n=2}^N p(z_n|z_{n-1},A))\prod_{n=1} p(x_n|z_n)$\\
 For the first node:\\
-$p(z_1|\pi) = \prod_{k=1}^K \pi_k^{z_{1,k}}$\\
-$p(z_n|z_{n-1},A) = \prod_{k=1}^K \prod_{j=1}^K A_{jk}^{z_{n-1},jz_{nk}}$\\
+$p(z_1|\pi) = \prod_{k=1}^K \pi_k^{z_{1,k}}$ with $\sum_{k=1}^K\pi_k=1$ \\
+$p(z_n|z_{n-1},A) = \prod_{k=1}^K \prod_{j=1}^K A_{jk}^{z_{n-1},jz_{nk}}$
+	with $\sum_{k=1}^K A_{jk}=1$ \\
 $p(x_n|z_n,\phi) = \prod_{k=1}^K p(x_n|\phi_k)^{z_{nk}}$\\
 Where A, $\phi$ and $\pi$ are the parameters of the model. $p(x_n|z_n,\phi)$ is
 model-dependent (e.g.: mixture of Gaussians, multinomial if discrete, etc).
 
 \vspace{-.4em}
 \subsubsection{Maximum likelihood (EM)} \vspace{-.4em}
-data: X, latent state: Z, parameters: $\theta = (\pi, A, \phi)$.\\
-$p(x|\theta) = \sum_z p (x,z|\theta)$\\
+Data: X, latent state: Z, parameters: $\theta = (\pi, A, \phi)$.\\
+$p(X|\theta) = \sum_Z p(X,Z|\theta)$\\
 This represents a sum of $K^N$ terms, which quickly becomes intractable, so we
 can use for instance the EM algorithm.\\
-\textbf{E-step:}\\
-$Q(\theta|\theta^{old}) = \sum_z p (z|x,\theta^{old})\ln p (x,z|\theta)$\\
-\textbf{M-step:}\\
-$\theta^{new} = \arg\max_{\theta}Q(\theta|\theta^{old})$\\
-EM-general:\\
-$\ln p(X|\theta) = \mathcal{L}(q, \theta) + \mathcal{KL}(q||p)$ where
-$\mathcal{L}(q, \theta) = \sum_Z q(Z) \ln(\frac{p(X, Z| \theta)}{ q(Z)})$ and
-$\mathcal{KL}(q||p) = -\sum_Z q(Z) \ln(\frac{p(Z| X, \theta)}{q(Z)})$.\\
-E-step: maximize $\mathcal{L}(q, \theta)$ wrt $q(Z)$.
-M-step: maximize $\mathcal{L}(q, \theta)$ wrt $\theta$.
+\textbf{E-step:} to be solved with sum-product \\
+$Q(\theta|\theta^{old}) = \sum_Z p(Z|X,\theta^{old})\ln p(X,Z|\theta)$ \\
+\textbf{M-step:} normal maximization with Lagrangians \\
+$\theta^{new} = \arg\max_{\theta}Q(\theta|\theta^{old})$ \\
+$\pi_k = \frac{\gamma(z_{1k})}{\sum_{j=1}^K\gamma(z_{1j})}$ \quad
+$A_{jk} =
+	\frac{\sum_{n=2}^N\xi(z_{n-1,j}z_{nk})}{\sum_{l=1}^K\sum_{n=2}^N\xi(z_{n-1,j}z_{nl})}$ \\
+\textit{Gaussian emission}: \\
+$\mu_k = \frac{\sum_{n=1}^N\gamma(z_{nk})x_n}{\sum_{n=1}^N\gamma(z_{nk})}$ \quad
+$\Sigma_k =
+	\frac{\sum_{n=1}^N\gamma(z_{nk})(x_n-\mu_k)(x_n-\mu_k)^\top}{\sum_{n=1}^N\gamma(z_{nk})}$ \\
+\textit{Discrete multinomial emission}:
+$\mu_{ik} = \frac{\sum_{n=1}^N\gamma(z_{nk})x_{ni}}{\sum_{n=1}^N\gamma(z_{nk})}$
 
 \subsubsection{Forward-Backward}
 $a(z_n) = p(x_n|z_n) \sum_{z_{n-1}} a(z_{n-1})p(z_n|z_{n-1})$ \\
@@ -755,7 +759,11 @@ Next, we propagate from the root back to the leaf: \\
 $\mu_{f_{n+1} \to f_n}(z_n)
 	= \sum_{z_{n+1}} f_{n+1}(z_n,z_{n+1}) \mu_{f_{n+1} \to f_{n+1}}(z_{n+1})$ \\
 And we can set: \\
-$\beta(z_n) = \mu_{f_{n+1} \to z_n}(z_n)$
+$\beta(z_n) = \mu_{f_{n+1} \to z_n}(z_n)$ \\
+Finally we have the result for the E step: \\
+$\gamma(z_n) = \frac{p(z_n,X)}{p(X)} = \frac{\alpha(z_n)\beta(z_n)}{p(X)}$ \\
+$\xi(z_{n-1},z_n) = p(z_{n-1},z_n|X)
+	= \frac{\alpha(z_{n-1})p(x_n|z_n)p(z_n|z_{n-1})\beta(z_n)}{p(X)}$ \\
 
 \subsection{Viterbi for HMM}
 Again, set $z_N$ as root and pass from leaf to root: \\
@@ -801,6 +809,61 @@ $Q(\theta, \theta^{old}) = \Ex_{z|\theta^{old}}[\text{ln } p(X,Z|\theta)]$ \\
 $\Ex[z_n] = \hat\mu_n$; $\Ex[z_nz_{n-1}^T] = \hat V_nJ_{n-1}^T+\hat\mu_n\hat\mu_{n-1}^T$;
 $\Ex[z_nz_n^T]= \hat V_n + \hat\mu_n\hat\mu_n^T$\\
 Kalman gain matrix: $K_n$ as found in $c_n = \distNorm(x_n|\mu_{x_n}, K_n)$
+
+
+\section{Causality}
+\begin{scriptsize}
+\textbf{Statistics}, (most of) Machine Learning About associations (correlation
+between chocolate consumption and winning a Nobel prize), Models the
+distribution of the data. Predicting by conditioning (if we observe that
+somebody eats much chocolate, what is the probability that he/she will win a
+Nobel prize?)
+\textbf{Causality}, About causation (does chocolate consumption cause winning a
+Nobel prize?), Models the mechanism that generates the data. Predicting results
+of interventions (if we force somebody to eat a lot of chocolate, what is the
+probability that he/she will win a Nobel prize?)
+$$p(y,x) \neq p(y|\mathrm{do}(x))$$
+The causal model playing violent computer games causes violence may be
+formalized as a linear model: $V = \beta G$ We summarize the in influence of all
+``other causes of V'' with a single variable E: $V = \beta G +E$. V and G are
+endogenous variables, E is an exogenous variable. By assumption, exogenous
+variables are not caused by endogenous variables (although they may cause
+endogenous variables). Endogenous variables are usually observed; exogenous
+variables are usually unobserved (latent, hidden).
+\end{scriptsize}
+
+\subsection{Back-door criterion}
+Let G be a graph with directed and bidirected  edges. \\
+A \textbf{path} q is a sequence of distinct consecutive edges (where the end
+node of each edge equals the start node of the next edge). \\
+A \textbf{collider} on a path q is a node X on q with precisely two ``incoming''
+arrow heads.\\
+Given a path p between nodes X and Y in G: we say that S \textbf{blocks} p if p
+contains: \\
+a \textbf{non-collider} which is in S or \\
+a \textbf{collider} which is not an \textbf{ancestor} of S. \\
+\textbf{Theorem: Back-door criterion}
+\begin{enumerate}
+	\item No element of S is a descendant of X
+	\item The elements of S block all back-door paths $X \leftarrow \ldots Y$ and
+		$X \leftrightarrow \ldots Y$ (paths between X and Y with an arrow pointing to X).
+\end{enumerate}
+In that case:
+$p(Y|\mathrm{do}(X)) = \int p(Y|X,X_s)p(X_s) \mathrm{d}X_s$
+
+\subsection{Do-calculus}
+\begin{enumerate}
+	\item Ignoring observations: \\
+		$p(y | \mathrm{do}(x), w, z) = p(y | \mathrm{do}(x), w)$
+		if $(y \ci z | x,w)_{\mathcal{G}_{\overline x}}$
+	\item Action / observ. exchange: \\
+		$p(y | \mathrm{do}(x), \mathrm{do}(z), w) = p(y | \mathrm{do}(x), z, w)$
+		if $(y \ci z | x, w)_{\mathcal{G}_{\overline{x}, \underline{z}}}$
+	\item Ignoring actions: \\
+		$p(y | \mathrm{do}(x), \mathrm{do}(z), w) = p(y | \mathrm{do}(x), w)$
+		if $(y \ci z | x, w)_{\mathcal{G}_{
+			\overline{x}, z \setminus \text{An}_{\mathcal{G}_{\overline{x}}}(w)}}$
+\end{enumerate}
 
 
 \section{Mathematical Tricks}
