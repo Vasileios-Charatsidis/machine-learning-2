@@ -2,4 +2,6 @@
 *.log
 *.out
 *.tex.swp
+.ipynb_checkpoints
+mnist.pkl.gz
 

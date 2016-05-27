@@ -1,3 +1,4 @@
 # Machine Learning 2
 
-###### Homeworks - UvA MSc AI
+###### Homeworks + Labs - UvA MSc AI
+
